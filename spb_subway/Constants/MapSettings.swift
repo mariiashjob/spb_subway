@@ -7,8 +7,12 @@
 
 import UIKit
 
+struct City {
+    static let spb = "Санкт-Петербург"
+}
+
 struct MapSettings {
-    static let lineWidth = 8.0
+    static let lineWidth = 4.0
     static let lineCap = CGLineCap.round
 }
 
@@ -20,5 +24,18 @@ struct MapScaleConstants {
 
 struct AttributesConstants {
     static let cornerRadius = 10.0
-    static let headerAlpha = 0.8
+    static let alpha = 0.8
+}
+
+struct Texts {
+    static let fromText = "From:"
+    static let toText = "To:"
+}
+
+struct Colors {
+    static let backgroundColor = UIColor.darkGray
+    static let backgroundHighlightedColor = UIColor.systemGray
+    static let textColor = UIColor.white
+    static let textHighlightedColor = UIColor.systemYellow
+    static let textDisabledColor = UIColor.systemGray
 }

@@ -10,8 +10,11 @@ import UIKit
 extension CGContext {
     
     @discardableResult
-    func setAttributes(color: UIColor, width: CGFloat = MapSettings.lineWidth, cap: CGLineCap = MapSettings.lineCap) -> CGContext {
-        self.setStrokeColor(color.cgColor)
+    func setAttributes(color: UIColor?, width: CGFloat = MapSettings.lineWidth, cap: CGLineCap = MapSettings.lineCap) -> CGContext {
+        
+        if let color = color {
+            self.setStrokeColor(color.cgColor)
+        }
         self.setLineWidth(width)
         self.setLineCap(cap)
         return self
@@ -19,6 +22,7 @@ extension CGContext {
     
     func drawLine(points: [CGPoint]) {
         for (index, point) in points.enumerated() {
+            
             if index == 0 {
                 self.move(to: point)
             } else {
