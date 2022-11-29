@@ -7,83 +7,158 @@
 
 import CoreGraphics
 
+protocol RouteCalculatorDelegate {
+    func updateMap()
+}
+
 class RouteCalculator {
     
     var subway: Subway
+    var startStation: Station? = nil
+    var endStation: Station? = nil
+    var delegate: RouteCalculatorDelegate?
     
     init(subway: Subway) {
         self.subway = subway
     }
     
     var routes = [Route]()
+    lazy var transits = [TransitionLine]()
     
-    func determineRoutes(startStation: Station, endStation: Station) -> [Route]{
-        if isLineEqual(startStation, endStation) {
-            if let route = determineRouteForEqualLine(startStation, endStation) {
-                routes.removeAll()
+    func clearRoutes() -> [Route] {
+        routes.removeAll()
+        delegate?.updateMap()
+        return [Route]()
+    }
+    
+    func determineRoutes(startStation: Station, endStation: Station) -> [Route] {
+        self.routes.removeAll()
+        self.transits.removeAll()
+        self.startStation = startStation
+        self.endStation = endStation
+        if isLineEqual() {
+            if let route = determineRouteForEqualLine() {
                 routes.append(route)
             }
         } else {
-            // TODO: other func
+            setUpRouteWithOneNode()
+            determineRoutesForVariousLines()
         }
+        printRoutes(stationFromName: startStation.name ?? "", stationToName: endStation.name ?? "")
+        delegate?.updateMap()
         return routes
     }
     
-    private func determineRouteForEqualLine(_ startStation: Station, _ endStation: Station) -> Route? {
-        var routeStations: [Station] = []
-        guard let line = getStationLine(station: startStation) else {
-            return nil
-        }
-        
-        if startStation.order < endStation.order {
-            routeStations = line.stations.filter { station in
-                station.order <= endStation.order && station.order >= startStation.order
+    private func determineRoutesForVariousLines() {
+        determineRouteSegments()
+        for transit in transits {
+            if let segments = transit.transitions {
+                if segments.filter({
+                    $0.from == nil || $0.to == nil
+                }).isEmpty {
+                    let route = Route(id: routes.count, segments: segments)
+                    routes.append(route)
+                }
             }
-        } else {
-            routeStations = line.stations.filter { station in
-                station.order <= startStation.order && station.order >= endStation.order
-            }.reversed()
-            
         }
-        return Route(id: 0, stations: routeStations)
     }
     
-    func isLineEqual(_ startStation: Station, _ endStation: Station) -> Bool {
+    private func determineRouteForEqualLine() -> Route? {
+        let segments = [Segment(from: self.startStation, to: self.endStation)]
+        return Route(id: 0, segments: segments)
+    }
+    
+    private func isLineEqual() -> Bool {
         guard
-            let startStationLine = getStationLine(station: startStation),
-            let endStationLine = getStationLine(station: endStation) else {
+            let startStationLine = self.startStation?.line(lines: subway.lines),
+            let endStationLine = self.endStation?.line(lines: subway.lines) else {
             return false
         }
         return startStationLine.id == endStationLine.id
     }
-    
-    func calculateRoutes(startStation: Station, endStation: Station) -> [Route] {
-        // TODO: 
-        return [Route]()
-    }
-    
-    func getRouteSegment() -> Segment {
-        // TODO:
-        return Segment()
-    }
-    
-    func getStationLine(station: Station) -> Line? {
-        return subway.lines.filter({ line in
-            line.id == station.lineId
-        }).first
-    }
 
-    func setUpRoutes(startStation: Station, endStation: Station) {
-        if let line = subway.lines.filter({ line in
-            line.id == startStation.lineId
-        }).first {
-            let nodes = line.allNodes()
-            for node in nodes {
-                let route = Route(id: routes.count, stations: [startStation, node])
-                routes.append(route)
+    func setUpRouteWithOneNode() {
+        guard let startStation = self.startStation,
+              let endStation = self.endStation,
+              let startLine = startStation.line(lines: subway.lines),
+              let endLine = endStation.line(lines: subway.lines),
+              let stationsWithNodesForStartLine = getStationsWithNodes(line: startLine),
+              let stationsWithNodesForEndLine = getStationsWithNodes(line: endLine),
+              let nodeTo = stationWithNodeToLine(endLine, stationsWithNodesForStartLine),
+              let nodeFrom = stationWithNodeToLine(startLine, stationsWithNodesForEndLine) else {
+            return
+        }
+        let segments = [
+            Segment(from: startStation, to: nodeTo),
+            Segment(from: nodeFrom, to: endStation)
+        ]
+        routes.append(Route(id: routes.count, segments: segments))
+    }
+    
+    private func getStationsWithNodes(line: Line) -> [Station]? {
+        return line.stations.filter({ station in
+            !station.nodes.isEmpty
+        })
+    }
+    
+    private func stationWithNodeToLine(_ line: Line, _ stations: [Station]) -> Station? {
+        return stations.filter { station in
+            station.nodes.filter { node in
+                node.lineId == line.id
+            }.first != nil
+        }.first
+    }
+    
+    private func transitLines() -> [TransitionLine] {
+        let stations = [self.startStation, self.endStation]
+        var transitLines = subway.lines
+        for station in stations {
+            guard let stationLine = station?.line(lines: subway.lines) else {
+                return [TransitionLine]()
+            }
+            if let index = transitLines.firstIndex(of: stationLine) {
+                transitLines.remove(at: index)
+            }
+        }
+        var transits = [TransitionLine]()
+        for line in transitLines {
+            let trasit = TransitionLine(line: line)
+            transits.append(trasit)
+        }
+        return transits
+    }
+    
+    private func determineRouteSegments() {
+        guard let startLine = self.startStation?.line(lines: subway.lines),
+              let endLine = self.endStation?.line(lines: subway.lines) else {
+            return
+        }
+        guard let startNodes = getStationsWithNodes(line: startLine),
+              let endNodes = getStationsWithNodes(line: endLine) else {
+            return
+        }
+        transits = transitLines()
+        for transit in transits {
+            let line = transit.line
+            if let transitNodes = getStationsWithNodes(line: line) {
+                transit.transitions = [
+                    Segment(from: self.startStation, to: stationWithNodeToLine(line, startNodes)),
+                    Segment(from: stationWithNodeToLine(startLine, transitNodes), to: stationWithNodeToLine(endLine, transitNodes)),
+                    Segment(from: stationWithNodeToLine(line, endNodes), to: self.endStation)
+                ]
+            } else {
+                transit.transitions = nil
+            }
+        }
+    }
+    
+    // TODO: should be removed when all is right and done
+    private func printRoutes(stationFromName: String, stationToName: String) {
+        for (index, route) in self.routes.enumerated() {
+            print("Маршрут #\(index) от \(stationFromName) до \(stationToName)")
+            for (index, station) in route.stations(subway).enumerated() {
+                print("\(index) \(station.name ?? "")")
             }
         }
     }
 }
-
-

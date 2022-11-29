@@ -25,6 +25,7 @@ class Mock {
     
     static func setLine(id: Int, width: CGFloat, height: CGFloat) -> Line? {
         var color: UIColor?
+        var disabledColor: UIColor?
         var coordinates: [Coordinate]?
         switch(id) {
         case 1:
@@ -44,6 +45,7 @@ class Mock {
             coordinates = [(0.2, 0.2), (0.2, 0.5), (0.4, 0.8), (0.7, 1.0), (0.7, 1.5)]
         default:
             color = nil
+            disabledColor = nil
             coordinates = nil
         }
         guard let color = color, let coordinates = coordinates, !coordinates.isEmpty else {
@@ -75,5 +77,19 @@ class Mock {
             y += 25
         }
         return stations
+    }
+    
+    @discardableResult
+    static func addNodes(stations: [Station], nodes: [String]) -> Mock.Type {
+        let stationsWithNodes = stations.filter({ nodes.contains($0.name ?? "") })
+        for station in stationsWithNodes {
+            for node in stationsWithNodes {
+                if station.name != node.name {
+                    node.coordinates = station.coordinates
+                    station.nodes.append(node)
+                }
+            }
+        }
+        return self
     }
 }

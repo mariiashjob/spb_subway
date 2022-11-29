@@ -18,7 +18,11 @@ class Subway {
     }
 }
     
-class Line {
+class Line: Equatable {
+    static func == (lhs: Line, rhs: Line) -> Bool {
+        return true
+    }
+    
     var id: Int
     var name: String?
     var color: UIColor?
@@ -59,7 +63,7 @@ class Station {
     var id: Int?
     var lineId: Int?
     var routeId: Int?
-    var nodes: [Station]?
+    var nodes: [Station]
     var name: String?
     var coordinates: CGPoint
     var lat: CGFloat? // TODO: should be removed, used in mock
@@ -83,6 +87,7 @@ class Station {
         self.order = order
         self.isClosed = false
         self.isInRoute = false
+        self.nodes = [Station]()
     }
     
     init(
@@ -97,6 +102,7 @@ class Station {
         self.coordinates = point
         self.isClosed = false
         self.isInRoute = false
+        self.nodes = [Station]()
     }
 }
 
@@ -105,10 +111,39 @@ extension Line {
     func allNodes() -> [Station] {
         var allStationNodes = [Station]()
         for station in self.stations {
-            if let nodes = station.nodes, !nodes.isEmpty {
+            let nodes = station.nodes
+            if !nodes.isEmpty {
                 allStationNodes.append(contentsOf: nodes)
             }
         }
         return allStationNodes
+    }
+}
+
+extension Station {
+    
+    func line(lines: [Line]) -> Line? {
+        return lines.filter { line in
+            line.id == self.lineId
+        }.first
+    }
+}
+
+extension Subway {
+    func determineStationsForSegment(_ segment: Segment) -> [Station] {
+        var stations: [Station] = []
+        guard let start = segment.from, let end = segment.to, let line = segment.line(self) else {
+            return [Station]()
+        }
+        if start.order < end.order {
+            stations = line.stations.filter { station in
+                station.order <= end.order && station.order >= start.order
+            }
+        } else {
+            stations = line.stations.filter { station in
+                station.order <= start.order && station.order >= end.order
+            }.reversed()
+        }
+        return stations
     }
 }

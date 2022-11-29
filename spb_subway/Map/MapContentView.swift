@@ -21,7 +21,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
     private lazy var currentMapFrame: CGRect? = nil
     private var searchFieldView: UIView? = nil
     private var searchLabel: UILabel? = nil
-    private let map = MapView()
+    let map = MapView()
     var searchField: SearchField? = nil
     var isKeyboardUp: Bool = false
     var keyboardHeight: CGFloat = 0.0
@@ -75,11 +75,11 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         switch(textField as? SearchField) {
         case fromTextField:
-            map.routeWatcher.stationFrom = nil
+            map.routeWatcher.clearStationFrom()
             // TODO: Bug - fields are jumping while clear one of them
             //showSearchField(placeholder: textField.placeholder)
         case toTextField:
-            map.routeWatcher.stationTo = nil
+            map.routeWatcher.clearStationto()
             //showSearchField(placeholder: textField.placeholder)
         case searchField:
             searchField?.text = nil
@@ -135,7 +135,6 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         map
             .updateMapCurrentView()
             .routeWatcher.changeStations()
-
     }
     
     @objc private func didTap(_ gester: UITapGestureRecognizer) {

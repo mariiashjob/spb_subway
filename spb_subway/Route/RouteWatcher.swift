@@ -35,16 +35,6 @@ class RouteWatcher: RouteWatcherDelegate {
     init(routeCalculator: RouteCalculator) {
         self.routeCalculator = routeCalculator
     }
-
-    internal func printRoutes() {
-        guard let stations = self.routes.first?.stations else {
-            return
-        }
-        print("Маршрут от \(self.stationFrom?.name) до \(self.stationTo?.name)")
-        for (index, station) in stations.enumerated() {
-            print("\(index) \(station.name)")
-        }
-    }
     
     @discardableResult
     func saveStation() -> RouteWatcher {
@@ -61,7 +51,6 @@ class RouteWatcher: RouteWatcherDelegate {
         if let stationFrom = self.stationFrom, let stationTo = stationTo {
             self.routes = routeCalculator.determineRoutes(startStation: stationFrom, endStation: stationTo)
         }
-        printRoutes()
         return self
     }
     
@@ -78,7 +67,6 @@ class RouteWatcher: RouteWatcherDelegate {
         if let stationFrom = self.stationFrom, let stationTo = stationTo {
             self.routes = routeCalculator.determineRoutes(startStation: stationFrom, endStation: stationTo)
         }
-        printRoutes()
     }
     
     @discardableResult
@@ -86,6 +74,17 @@ class RouteWatcher: RouteWatcherDelegate {
         self.currentDirection = nil
         delegate?.updateCurrentStationField(station: nil)
         return self
+    }
+    
+    func clearStationFrom() {
+        self.routes = routeCalculator.clearRoutes()
+        self.stationFrom = nil
+       
+    }
+    
+    func clearStationto() {
+        self.routes = routeCalculator.clearRoutes()
+        self.stationTo = nil
     }
     
     func updateCurrentDirection(_ value: Bool) {

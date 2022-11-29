@@ -10,13 +10,14 @@ import UIKit
 extension CGContext {
     
     @discardableResult
-    func setAttributes(color: UIColor?, width: CGFloat = MapSettings.lineWidth, cap: CGLineCap = MapSettings.lineCap) -> CGContext {
+    func setAttributes(color: UIColor?, alpha: CGFloat, width: CGFloat = MapSettings.lineWidth, cap: CGLineCap = MapSettings.lineCap) -> CGContext {
         
         if let color = color {
             self.setStrokeColor(color.cgColor)
         }
         self.setLineWidth(width)
         self.setLineCap(cap)
+        self.setAlpha(alpha)
         return self
     }
     
