@@ -12,10 +12,11 @@ struct City {
 }
 
 struct MapSettings {
-    static let lineWidth = 4.0
+    static let coefficient = 0.01
+    static let lineWidth = 3.0
     static let lineCap = CGLineCap.round
     static let alphaEnabled = 1.0
-    static let alphaDisabled = 0.3
+    static let alphaDisabled = 0.2
 }
 
 struct MapScaleConstants {

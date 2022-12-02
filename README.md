@@ -6,9 +6,8 @@
 4. set up correct coordinates
 
 set up correct coordinates
-- load all stations
-- determine nodes
-- build in a right position
-
-
-
+- uicolor extension +
+- load all stations +
+- draw in right positions +
+- determine nodes +
+- calculate distance between stations *

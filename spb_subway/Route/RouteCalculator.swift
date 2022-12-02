@@ -44,7 +44,7 @@ class RouteCalculator {
             setUpRouteWithOneNode()
             determineRoutesForVariousLines()
         }
-        printRoutes(stationFromName: startStation.name ?? "", stationToName: endStation.name ?? "")
+        printRoutes(stationFromName: startStation.name, stationToName: endStation.name ?? "")
         delegate?.updateMap()
         return routes
     }
@@ -155,9 +155,9 @@ class RouteCalculator {
     // TODO: should be removed when all is right and done
     private func printRoutes(stationFromName: String, stationToName: String) {
         for (index, route) in self.routes.enumerated() {
-            print("Маршрут #\(index) от \(stationFromName) до \(stationToName)")
+            print("Маршрут #\(index+1) от \(stationFromName) до \(stationToName)")
             for (index, station) in route.stations(subway).enumerated() {
-                print("\(index) \(station.name ?? "")")
+                print("\(index+1) \(station.name)")
             }
         }
     }

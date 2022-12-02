@@ -87,7 +87,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         default:
             return false
         }
-        map.updateMapCurrentView()
+        map.updateMapLabels()
         return true
     }
     
@@ -100,8 +100,8 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         if let searchField = searchField, let searchFieldView = searchFieldView {
             searchFieldView.alpha = 0
             if let text = searchField.text {
-                if let selectedStation = map.stations.filter({ station in
-                    station.name?.removeSpaces() == text.removeSpaces()
+                if let selectedStation = map.subway.stations.filter({ station in
+                    station.name.removeSpaces() == text.removeSpaces()
                 }).first {
                     currentField.text = text
                     let isFromStation = map.routeWatcher.currentDirection?.isFromStation ?? true
@@ -117,7 +117,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
             }
         }
         // TODO: Bug - current station does not disappear from map after return with keyboard
-        map.updateMapCurrentView()
+        map.updateMapLabels()
         directionFieldsView.alpha = 1
         return self.endEditing(true)
         // TODO: Bug - keyboard is not closed after done button pressed while seaarch field has not been edited
@@ -133,7 +133,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         fromTextField.text = map.routeWatcher.stationTo?.name
         toTextField.text = map.routeWatcher.stationFrom?.name
         map
-            .updateMapCurrentView()
+            .updateMapLabels()
             .routeWatcher.changeStations()
     }
     

@@ -12,6 +12,17 @@ class ViewController: UIViewController {
     private var scrollView = UIScrollView()
     private let mapContentView = MapContentView.loadFromNib()
     private var scrollViewHeight: CGFloat? = nil
+    private var lines: [Line] = []
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if self.mapContentView.map.subway.lines.isEmpty {
+            SubwayLoader.getSpbSubwayLines { lines in
+                self.mapContentView.map.subway.lines = lines
+                self.mapContentView.map.updateMap()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

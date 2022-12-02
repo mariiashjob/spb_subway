@@ -10,28 +10,29 @@ import Alamofire
 import RealmSwift
 
 class Area {
-    var id: Int
-    var parentId: Int
+    var id: Int?
     var name: String
-    var areas: [Area]
+    var url: String
+    var lines: [Line]
     
     init?(data: NSDictionary) {
-        guard let id = data["id"] as? Int,
-              let parentId = data["parent_id"] as? Int,
+        guard let id = data["id"] as? String,
               let name = data["name"] as? String,
-              let areasData = data["areas"] as? [NSDictionary]
-             else { return nil }
+              let url = data["url"] as? String,
+              let linesData = data["lines"] as? [NSDictionary] else {
+            return nil
+        }
         
-        var areas: [Area] = []
-        for data in areasData {
-            if let area = Area(data: data) {
-                areas.append(area)
+        var lines: [Line] = []
+        for data in linesData {
+            if let area = Line(data: data) {
+                lines.append(area)
             }
         }
 
-        self.id = id
-        self.parentId = parentId
+        self.id = Int(id)
         self.name = name
-        self.areas = areas
+        self.url = url
+        self.lines = lines
     }
 }
