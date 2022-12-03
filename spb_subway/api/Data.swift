@@ -25,7 +25,7 @@ class Data {
         MapCoordinate(name: "Василеостровская", point: CGPoint(x: 0.1, y: 0.4)),
         MapCoordinate(name: "Новочеркасская", point: CGPoint(x: 1.0, y: 0.55)),
         MapCoordinate(name: "Улица Дыбенко", point: CGPoint(x: 1.0, y: 0.7)),
-        MapCoordinate(name: "Комендантский проспект", point: CGPoint(x: 0.2, y: 0.05)),
+        MapCoordinate(name: "Комендантский проспект", point: CGPoint(x: 0.2, y: 0.0)),
         MapCoordinate(name: "Спортивная", point: CGPoint(x: 0.2, y: 0.2)),
         MapCoordinate(name: "Адмиралтейская", point: CGPoint(x: 0.2, y: 0.45)),
         MapCoordinate(name: "Садовая", point: CGPoint(x: 0.3, y: 0.5)),

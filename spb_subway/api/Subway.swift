@@ -102,6 +102,7 @@ class Station {
     var order: Int
     var isClosed: Bool?
     var isInRoute: Bool?
+    var label: UILabel?
     
     init?(data: NSDictionary) {
         guard let id = data["id"] as? String,
@@ -153,6 +154,10 @@ extension Station {
                 x: coordinates.x * determinant.width,
                 y: coordinates.y * determinant.height)
         }
+    }
+    
+    func color(lines: [Line]) -> UIColor? {
+        return lines.filter { $0.id == self.lineId }.first?.color
     }
 }
 
