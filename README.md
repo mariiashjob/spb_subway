@@ -1,13 +1,10 @@
 # spb_subway
 
+## Tasks:
 1. screen adaptation for map
-2. screen adaptation for search field
-3. add screen for route details 
-4. set up correct coordinates
+2. screen adaptation for search fields
+3. add animations for all movements 
+4. add navigation - hightlight current station in detailed route (or future feature)
 
-set up correct coordinates
-- uicolor extension +
-- load all stations +
-- draw in right positions +
-- determine nodes +
-- calculate distance between stations *
+## Bugs:
+- subway lines are not loaded for the first time app is open 

@@ -13,7 +13,6 @@ protocol RouteWatcherDelegate {
     var stationTo: Station? { get set }
     var currentDirection: Direction? { get set }
     func saveStation() -> RouteWatcher
-    func getRouteTime() -> CGFloat
 }
 
 protocol DirectionProtocol {
@@ -31,6 +30,7 @@ class RouteWatcher: RouteWatcherDelegate {
     var currentDirection: Direction? = nil
     var delegate: MapViewDelegate? = nil
     var routeCalculator: RouteCalculator
+    var routeId: Int = 0
     
     init(routeCalculator: RouteCalculator) {
         self.routeCalculator = routeCalculator
@@ -50,13 +50,9 @@ class RouteWatcher: RouteWatcherDelegate {
         }
         if let stationFrom = self.stationFrom, let stationTo = stationTo {
             self.routes = routeCalculator.determineRoutes(startStation: stationFrom, endStation: stationTo)
+            routeId = routes.startIndex
         }
         return self
-    }
-    
-    func getRouteTime() -> CGFloat {
-        // TODO: use static function to calculate time
-        return 20.00
     }
     
     func changeStations() {
@@ -66,6 +62,7 @@ class RouteWatcher: RouteWatcherDelegate {
         self.stationTo = currentStationFrom
         if let stationFrom = self.stationFrom, let stationTo = stationTo {
             self.routes = routeCalculator.determineRoutes(startStation: stationFrom, endStation: stationTo)
+            routeId = routes.startIndex
         }
     }
     

@@ -17,6 +17,8 @@ struct MapSettings {
     static let lineCap = CGLineCap.round
     static let alphaEnabled = 1.0
     static let alphaDisabled = 0.2
+    static let fontSize = 7.0
+    static let fontLargeSize = 15.0
 }
 
 struct MapScaleConstants {
@@ -31,8 +33,11 @@ struct AttributesConstants {
 }
 
 struct Texts {
-    static let fromText = "From:"
-    static let toText = "To:"
+    static let fromText = "Откуда:"
+    static let toText = "Куда:"
+    static let fromStation = "A"
+    static let toStation = "B"
+    static let transfer = "Сделайте пересадку"
 }
 
 struct Colors {
@@ -41,4 +46,10 @@ struct Colors {
     static let textColor = UIColor.white
     static let textHighlightedColor = UIColor.systemYellow
     static let textDisabledColor = UIColor.systemGray
+}
+
+struct Symbols {
+    static let bullet: String = "\u{2022}"
+    static let whiteTriangle: String = "\u{25B7}"
+    static let blackTriangle: String = "\u{25B6}"
 }

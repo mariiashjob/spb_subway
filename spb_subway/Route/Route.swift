@@ -10,28 +10,41 @@ import UIKit
 class Route {
     var id: Int
     var segments: SegemntedRoute
+    lazy var time: CGFloat? = {
+        TimeCalculator.totalTime(route: self)
+    }()
     init(id: Int, segments: SegemntedRoute) {
         self.id = id
         self.segments = segments
     }
 }
 
-class Segment {
-    var from: Station?
-    var to: Station?
+class Segment: Equatable {
+    static func == (lhs: Segment, rhs: Segment) -> Bool {
+        return lhs.from == rhs.from && lhs.to == rhs.to
+    }
+    
+    var from: Station
+    var to: Station
+    var lineId: Int
+    var distance: CGFloat
+    var time: CGFloat
+    var stations: [Station] = []
+    var color: UIColor?
 
-    init(from: Station?, to: Station?) {
+    init(from: Station, to: Station, subway: Subway) {
         self.from = from
         self.to = to
+        self.distance = DistanceCalculator.calculateDistanceKm(from: self.from, to: self.to)
+        self.time = TimeCalculator.timeByTrain(self.distance)
+        self.lineId = self.from.lineId
+        self.color = line(subway)?.color
     }
 }
 
 extension Segment {
     func line(_ subway: Subway) -> Line? {
-        guard let station = self.from else {
-            return nil
-        }
-        return station.line(lines: subway.lines)
+        return self.from.line(lines: subway.lines)
     }
     
     func color(_ subway: Subway) -> UIColor? {

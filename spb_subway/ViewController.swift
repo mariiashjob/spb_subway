@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         if self.mapContentView.map.subway.lines.isEmpty {
             SubwayLoader.getSpbSubwayLines { lines in
                 self.mapContentView.map.subway.lines = lines
-                self.mapContentView.map.updateMap()
+                self.mapContentView.map.updateMapContent()
             }
         }
     }

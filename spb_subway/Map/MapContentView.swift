@@ -7,23 +7,27 @@
 
 import UIKit
 
-class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
+class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRecognizerDelegate {
     
+    @IBOutlet weak var cityName: UILabel!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var footerView: UIView!
-    @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var fieldsView: UIStackView!
+    @IBOutlet weak var lineImageView: UIImageView!
     @IBOutlet weak var directionFieldsView: UIView!
     @IBOutlet weak var fromTextField: SearchField!
     @IBOutlet weak var toTextField: SearchField!
-    @IBOutlet weak var lineImageView: UIImageView!
+    @IBOutlet weak var infoView: UIView!
     @IBOutlet weak var changeButton: UIButton!
-    private lazy var currentField: UITextField? = nil
-    private lazy var currentMapFrame: CGRect? = nil
-    private var searchFieldView: UIView? = nil
-    private var searchLabel: UILabel? = nil
+    private var currentField: UITextField?
+    private var currentMapFrame: CGRect?
+    private var searchFieldView: UIView?
+    private var searchLabel: UILabel?
     let map = MapView()
-    var searchField: SearchField? = nil
+    lazy var routesView = RoutesView(routeWatcher: self.map.routeWatcher)
+    var searchField: SearchField?
     var isKeyboardUp: Bool = false
+    var isFooterUp: Bool = false
     var keyboardHeight: CGFloat = 0.0
     
     private var mapFrame: CGRect {
@@ -58,8 +62,8 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         map.delegate = self
         fromTextField.delegate = self
         toTextField.delegate = self
-        fromTextField.attributedPlaceholder = attributedPlaceholder(text: Texts.fromText)
-        toTextField.attributedPlaceholder = attributedPlaceholder(text: Texts.toText)
+        fromTextField.attributedPlaceholder = Texts.fromText.attributedPlaceholder()
+        toTextField.attributedPlaceholder = Texts.toText.attributedPlaceholder()
         footerView.layer.cornerRadius = AttributesConstants.cornerRadius
         contentView.layer.cornerRadius = AttributesConstants.cornerRadius
         contentView.addSubview(map)
@@ -68,6 +72,9 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         lineImageView.backgroundColor = nil
         configureFooterView()
         addGestures()
+        if infoView.alpha == 1.0 {
+            infoView.addSubview(routesView)
+        }
         // TODO: bug - stations are not highlighted after foreground app state
     }
     
@@ -88,6 +95,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
             return false
         }
         map.updateMapLabels()
+        isFooterUp = false
         return true
     }
     
@@ -119,6 +127,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         // TODO: Bug - current station does not disappear from map after return with keyboard
         map.updateMapLabels()
         directionFieldsView.alpha = 1
+        isFooterUp = false
         return self.endEditing(true)
         // TODO: Bug - keyboard is not closed after done button pressed while seaarch field has not been edited
     }
@@ -137,16 +146,16 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
             .routeWatcher.changeStations()
     }
     
-    @objc private func didTap(_ gester: UITapGestureRecognizer) {
-        currentField = gester.view as? SearchField
+    @objc private func didTap(_ gesture: UITapGestureRecognizer) {
+        currentField = gesture.view as? SearchField
         guard let currentField = currentField, let placeholder = currentField.placeholder else {
             return
         }
         showSearchField(placeholder: placeholder)
     }
 
-    @objc private func didPan(_ gester: UIPanGestureRecognizer) {
-        let translation = gester.translation(in: self)
+    @objc private func didPan(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: self)
         UIView.animate(withDuration: MapScaleConstants.duration, delay: MapScaleConstants.delay, animations: {
             self.map.frame = CGRect(
                 x: translation.x,
@@ -186,6 +195,39 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         currentMapFrame = map.frame
     }
     
+    @objc private func didSwipe(_ swipeGesture: UISwipeGestureRecognizer) {
+        var locationOfBeganSwipe = CGPoint()
+        if swipeGesture.state == .ended {
+            locationOfBeganSwipe = swipeGesture.location(ofTouch: 0, in: self)
+        }
+        let y = locationOfBeganSwipe.y
+        let maxRouteId = map.routeWatcher.routes.count - 1
+        if swipeGesture.direction == .right {
+            if map.routeWatcher.routeId == 0 {
+                map.routeWatcher.routeId = maxRouteId
+            } else {
+                map.routeWatcher.routeId -= 1
+            }
+        } else if swipeGesture.direction == .left {
+            if map.routeWatcher.routeId == maxRouteId {
+                map.routeWatcher.routeId = 0
+            } else {
+                map.routeWatcher.routeId += 1
+            }
+        } else if swipeGesture.direction == .up && self.center.y < footerView.frame.minY{
+            isFooterUp = true
+        } else if swipeGesture.direction == .down && y < footerView.frame.minY + fieldsView.frame.maxY {
+            isFooterUp = false
+       }
+        map.updateMapContent()
+        layoutSubviews()
+    }
+    
+    internal func updateRouteInfo() {
+        routesView.updateRouteInfo(subway: map.subway, routeId: map.routeWatcher.routeId, isFooterUp: isFooterUp)
+        routesView.routeDetailsView.redrawDetailedRoute(subway: map.subway, routeId: map.routeWatcher.routeId)
+    }
+    
     internal func updateCurrentStationField(station: Station?) {
         guard let searchField = searchField else {
             return
@@ -198,7 +240,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
     }
     
     private func configureFooterView() {
-        let footerViewHeight = 100.0
+        var footerViewHeight = 100.0
         if isKeyboardUp {
             footerView.frame = CGRect(
                 x: 0,
@@ -206,21 +248,34 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
                 width: self.bounds.width,
                 height: footerViewHeight
             )
-        } else {
+            infoView.alpha = 0
+        } else if map.routeWatcher.routes.isEmpty {
             footerView.frame = CGRect(
                 x: 0,
                 y: self.bounds.height - footerViewHeight,
                 width: self.bounds.width,
                 height: footerViewHeight
             )
+            infoView.alpha = 0
+        } else if isFooterUp {
+            footerView.frame = CGRect(
+                x: 0,
+                y: footerViewHeight,
+                width: self.bounds.width,
+                height: self.bounds.height
+            )
+            infoView.alpha = 1
+        } else {
+            footerViewHeight *= 2
+            footerView.frame = CGRect(
+                x: 0,
+                y: self.bounds.height - footerViewHeight,
+                width: self.bounds.width,
+                height: footerViewHeight
+            )
+            infoView.alpha = 1
+            routesView.routeDetailsView.alpha = 0
         }
-    }
-    
-    private func attributedPlaceholder(text: String, color: UIColor = Colors.textDisabledColor) -> NSAttributedString {
-        return NSAttributedString(
-            string: text,
-            attributes: [NSAttributedString.Key.foregroundColor: color]
-        )
     }
     
     private func addGestures() {
@@ -228,10 +283,22 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         let panGecture = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
         let tapFromfieldGecture = UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))
         let tapToFieldGecture = UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))
+        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
+        swipeRightGesture.direction = .right
+        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
+        swipeLeftGesture.direction = .left
+        let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
+        swipeUpGesture.direction = .up
+        let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
+        swipeDownGesture.direction = .down
         contentView.addGestureRecognizer(pinchGecture)
         contentView.addGestureRecognizer(panGecture)
         fromTextField.addGestureRecognizer(tapFromfieldGecture)
         toTextField.addGestureRecognizer(tapToFieldGecture)
+        footerView.addGestureRecognizer(swipeRightGesture)
+        footerView.addGestureRecognizer(swipeLeftGesture)
+        footerView.addGestureRecognizer(swipeUpGesture)
+        footerView.addGestureRecognizer(swipeDownGesture)
     }
     
     private func showSearchField(placeholder: String?) {
@@ -259,15 +326,15 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         searchFieldView.frame = CGRect(
             x: 0,
             y: 0,
-            width: stackView.bounds.width,
-            height: stackView.bounds.height
+            width: fieldsView.bounds.width,
+            height: fieldsView.bounds.height
         )
         searchFieldView.layer.borderWidth = 1.0
         searchFieldView.layer.borderColor = Colors.backgroundColor.cgColor
         searchFieldView.backgroundColor = Colors.textHighlightedColor
         searchFieldView.layer.cornerRadius = AttributesConstants.cornerRadius
         searchFieldView.clipsToBounds = true
-        stackView.addSubview(searchFieldView)
+        fieldsView.addSubview(searchFieldView)
     }
     
     private func configureSearchField(direction: String?) {
@@ -281,11 +348,11 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate {
         searchLabel.textAlignment = .center
         searchLabel.textColor = Colors.backgroundColor
         searchField.delegate = self
-        let bounds = stackView.bounds
+        let bounds = fieldsView.bounds
         searchLabel.frame = CGRect(
             x: 0,
             y: 0,
-            width: 60.0,
+            width: searchLabel.width(),
             height: bounds.height
         )
         let searchLabelWidth = searchLabel.bounds.width

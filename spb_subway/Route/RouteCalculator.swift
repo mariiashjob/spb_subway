@@ -8,10 +8,10 @@
 import CoreGraphics
 
 protocol RouteCalculatorDelegate {
-    func updateMap()
+    func updateMapContent()
 }
 
-class RouteCalculator {
+final class RouteCalculator {
     
     var subway: Subway
     var startStation: Station? = nil
@@ -27,7 +27,7 @@ class RouteCalculator {
     
     func clearRoutes() -> [Route] {
         routes.removeAll()
-        delegate?.updateMap()
+        delegate?.updateMapContent()
         return [Route]()
     }
     
@@ -44,8 +44,8 @@ class RouteCalculator {
             setUpRouteWithOneNode()
             determineRoutesForVariousLines()
         }
-        printRoutes(stationFromName: startStation.name, stationToName: endStation.name ?? "")
-        delegate?.updateMap()
+        printRoutes(stationFromName: startStation.name, stationToName: endStation.name)
+        delegate?.updateMapContent()
         return routes
     }
     
@@ -53,18 +53,17 @@ class RouteCalculator {
         determineRouteSegments()
         for transit in transits {
             if let segments = transit.transitions {
-                if segments.filter({
-                    $0.from == nil || $0.to == nil
-                }).isEmpty {
-                    let route = Route(id: routes.count, segments: segments)
-                    routes.append(route)
-                }
+                let route = Route(id: routes.count, segments: segments)
+                routes.append(route)
             }
         }
     }
     
     private func determineRouteForEqualLine() -> Route? {
-        let segments = [Segment(from: self.startStation, to: self.endStation)]
+        guard let from = self.startStation, let to = self.endStation else {
+            return nil
+        }
+        let segments = [Segment(from: from, to: to, subway: self.subway)]
         return Route(id: 0, segments: segments)
     }
     
@@ -89,8 +88,8 @@ class RouteCalculator {
             return
         }
         let segments = [
-            Segment(from: startStation, to: nodeTo),
-            Segment(from: nodeFrom, to: endStation)
+            Segment(from: startStation, to: nodeTo, subway: self.subway),
+            Segment(from: nodeFrom, to: endStation, subway: self.subway)
         ]
         routes.append(Route(id: routes.count, segments: segments))
     }
@@ -140,15 +139,20 @@ class RouteCalculator {
         transits = transitLines()
         for transit in transits {
             let line = transit.line
-            if let transitNodes = getStationsWithNodes(line: line) {
-                transit.transitions = [
-                    Segment(from: self.startStation, to: stationWithNodeToLine(line, startNodes)),
-                    Segment(from: stationWithNodeToLine(startLine, transitNodes), to: stationWithNodeToLine(endLine, transitNodes)),
-                    Segment(from: stationWithNodeToLine(line, endNodes), to: self.endStation)
-                ]
-            } else {
-                transit.transitions = nil
+            guard let transitNodes = getStationsWithNodes(line: line),
+                  let startStation = self.startStation,
+                  let endStation = self.endStation,
+                  let startNode = stationWithNodeToLine(line, startNodes),
+                  let transitFromNode = stationWithNodeToLine(startLine, transitNodes),
+                  let transitToNode = stationWithNodeToLine(endLine, transitNodes),
+                  let endNode = stationWithNodeToLine(line, endNodes) else {
+                return transit.transitions = nil
             }
+            transit.transitions = [
+                Segment(from: startStation, to: startNode, subway: self.subway),
+                Segment(from: transitFromNode, to: transitToNode, subway: self.subway),
+                Segment(from: endNode, to: endStation, subway: self.subway)
+            ]
         }
     }
     
