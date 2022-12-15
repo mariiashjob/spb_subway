@@ -129,7 +129,7 @@ class MapView: UIView, RouteCalculatorDelegate {
             stationNameLabel.textColor = Colors.textColor
             stationNameLabel.font = stationNameLabel.font.withSize(MapSettings.fontSize)
             stationNameLabel.isUserInteractionEnabled = true
-            let delta = deltaCoordinates(station: node.first ?? "")
+            let delta = deltaLabelCoordinates(station: node.first ?? "")
             stationNameLabel.frame = CGRect(
                 x: coordinates.x + delta.x,
                 y: coordinates.y + delta.y,
@@ -275,6 +275,7 @@ class MapView: UIView, RouteCalculatorDelegate {
                 .completeSubwayСoordinates(subway)
                 .convertCoordinates(subway)
         }
+        
         for (index, line) in subway.lines.enumerated() {
             var alpha: CGFloat = MapSettings.alphaEnabled
             if !routeWatcher.routes.isEmpty {
@@ -315,7 +316,7 @@ class MapView: UIView, RouteCalculatorDelegate {
         addToViewDirectionLabels()
     }
     
-    private func deltaCoordinates(station: String) -> CGPoint {
+    private func deltaLabelCoordinates(station: String) -> CGPoint {
         switch(station) {
         case "Площадь Восстания":
             return CGPoint(x: 30.0, y: 0.0)

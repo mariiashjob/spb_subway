@@ -31,9 +31,20 @@ class RouteWatcher: RouteWatcherDelegate {
     var delegate: MapViewDelegate? = nil
     var routeCalculator: RouteCalculator
     var routeId: Int = 0
+    var isRouteUpdated: Bool = true
     
     init(routeCalculator: RouteCalculator) {
         self.routeCalculator = routeCalculator
+    }
+    
+    func updateRoute(value: Int? = nil, id: Int? = nil) {
+        if let value = value {
+            self.routeId += value
+        }
+        if let id = id {
+            self.routeId = id
+        }
+        self.isRouteUpdated = true
     }
     
     @discardableResult
@@ -76,7 +87,6 @@ class RouteWatcher: RouteWatcherDelegate {
     func clearStationFrom() {
         self.routes = routeCalculator.clearRoutes()
         self.stationFrom = nil
-       
     }
     
     func clearStationto() {

@@ -14,7 +14,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DfU-2R-l6r">
+                <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="DfU-2R-l6r">
                     <rect key="frame" x="20" y="124" width="374" height="652"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="500" id="dSP-He-s1w"/>
@@ -27,7 +27,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                         </view>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hrT-Ft-cgt">
-                            <rect key="frame" x="10" y="0.0" width="394" height="20"/>
+                            <rect key="frame" x="10" y="5" width="394" height="20"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="fI3-Ek-SjQ"/>
@@ -39,7 +39,7 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7MN-jb-akg">
                                     <rect key="frame" x="0.0" y="0.0" width="394" height="50"/>
                                     <subviews>
-                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="From: " minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="niq-SN-O3T" customClass="SearchField" customModule="spb_subway" customModuleProvider="target">
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="From: " minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="niq-SN-O3T" customClass="SearchField" customModule="spb_subway" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="8" width="182" height="34"/>
                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
@@ -62,7 +62,7 @@
                                                 <action selector="changeDirections:" destination="iN0-l3-epB" eventType="touchUpInside" id="ema-ac-gyQ"/>
                                             </connections>
                                         </button>
-                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="To: " textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="lTp-6Y-aJs" customClass="SearchField" customModule="spb_subway" customModuleProvider="target">
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="To: " textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lTp-6Y-aJs" customClass="SearchField" customModule="spb_subway" customModuleProvider="target">
                                             <rect key="frame" x="212" y="8" width="182" height="34"/>
                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
@@ -73,6 +73,7 @@
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
                                     </subviews>
+                                    <color key="backgroundColor" systemColor="systemYellowColor"/>
                                     <constraints>
                                         <constraint firstItem="lTp-6Y-aJs" firstAttribute="centerY" secondItem="7MN-jb-akg" secondAttribute="centerY" id="ACf-U2-hbA"/>
                                         <constraint firstItem="lTp-6Y-aJs" firstAttribute="leading" secondItem="uwf-ul-6Pr" secondAttribute="trailing" constant="5" id="BFO-Ua-4k8"/>
@@ -89,7 +90,8 @@
                             <viewLayoutGuide key="safeArea" id="s3v-WI-qJO"/>
                         </stackView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Id0-QL-WRe">
-                            <rect key="frame" x="20" y="85" width="374" height="100"/>
+                            <rect key="frame" x="20" y="75" width="374" height="100"/>
+                            <color key="backgroundColor" systemColor="systemYellowColor"/>
                         </view>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemYellowColor"/>
@@ -108,8 +110,8 @@
                         <constraint firstItem="TAD-i4-oC2" firstAttribute="height" secondItem="sxc-ek-MSR" secondAttribute="height" multiplier="0.5" id="nKt-SJ-1ka"/>
                         <constraint firstItem="Id0-QL-WRe" firstAttribute="height" secondItem="TAD-i4-oC2" secondAttribute="height" multiplier="2" id="pIZ-ew-j70"/>
                         <constraint firstItem="TAD-i4-oC2" firstAttribute="centerY" secondItem="sxc-ek-MSR" secondAttribute="centerY" id="s2C-aL-qSd"/>
-                        <constraint firstItem="hrT-Ft-cgt" firstAttribute="top" secondItem="sxc-ek-MSR" secondAttribute="top" id="sI1-eL-NZR"/>
-                        <constraint firstItem="Id0-QL-WRe" firstAttribute="top" secondItem="TAD-i4-oC2" secondAttribute="bottom" constant="10" id="sLB-Ii-aI7"/>
+                        <constraint firstItem="hrT-Ft-cgt" firstAttribute="top" secondItem="sxc-ek-MSR" secondAttribute="top" constant="5" id="sI1-eL-NZR"/>
+                        <constraint firstItem="Id0-QL-WRe" firstAttribute="top" secondItem="TAD-i4-oC2" secondAttribute="bottom" id="sLB-Ii-aI7"/>
                         <constraint firstAttribute="trailing" secondItem="zk8-bU-jjA" secondAttribute="trailing" id="sQ2-jB-siX"/>
                     </constraints>
                 </view>
@@ -127,7 +129,6 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="changeButton" destination="uwf-ul-6Pr" id="yLp-Ki-RYq"/>
                 <outlet property="contentView" destination="DfU-2R-l6r" id="Q6i-8d-Mv0"/>
                 <outlet property="directionFieldsView" destination="zk8-bU-jjA" id="6l6-N0-5k0"/>
                 <outlet property="fieldsView" destination="TAD-i4-oC2" id="wRQ-kg-REv"/>

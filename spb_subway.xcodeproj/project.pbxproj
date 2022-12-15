@@ -22,6 +22,7 @@
 		F9760384292504090035CEB4 /* MapContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9760383292504090035CEB4 /* MapContentView.swift */; };
 		F9760386292504180035CEB4 /* MapContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9760385292504180035CEB4 /* MapContentView.xib */; };
 		F9760388292509E10035CEB4 /* SearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9760387292509E10035CEB4 /* SearchField.swift */; };
+		F995A0C1294B4AD1003E9D30 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F995A0C0294B4AD1003E9D30 /* CardView.swift */; };
 		F998EA702940CC87000E32A6 /* DistanceCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F998EA6F2940CC87000E32A6 /* DistanceCalculator.swift */; };
 		F998EA722940E40F000E32A6 /* TimeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F998EA712940E40F000E32A6 /* TimeCalculator.swift */; };
 		F998EA74294200D5000E32A6 /* RouteDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F998EA73294200D5000E32A6 /* RouteDetailsView.swift */; };
@@ -34,6 +35,7 @@
 		F9A2197F29266ACA0079A4BE /* Subway.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A2197E29266ACA0079A4BE /* Subway.swift */; };
 		F9A2198229266B6D0079A4BE /* MapSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A2198129266B6D0079A4BE /* MapSettings.swift */; };
 		F9A2198529266CF30079A4BE /* CGContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A2198429266CF30079A4BE /* CGContext+Extensions.swift */; };
+		F9B3E84E294A2C0F00D0842C /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B3E84B294A2C0F00D0842C /* CardsView.swift */; };
 		F9EBC3392938BD06006FF027 /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBC3382938BD06006FF027 /* Coordinates.swift */; };
 		F9FE6A1129290839002413C4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE6A1029290839002413C4 /* Data.swift */; };
 		F9FE6A1329294407002413C4 /* RouteWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE6A1229294407002413C4 /* RouteWatcher.swift */; };
@@ -59,6 +61,7 @@
 		F9760383292504090035CEB4 /* MapContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapContentView.swift; sourceTree = "<group>"; };
 		F9760385292504180035CEB4 /* MapContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapContentView.xib; sourceTree = "<group>"; };
 		F9760387292509E10035CEB4 /* SearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchField.swift; sourceTree = "<group>"; };
+		F995A0C0294B4AD1003E9D30 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		F998EA6F2940CC87000E32A6 /* DistanceCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceCalculator.swift; sourceTree = "<group>"; };
 		F998EA712940E40F000E32A6 /* TimeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCalculator.swift; sourceTree = "<group>"; };
 		F998EA73294200D5000E32A6 /* RouteDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDetailsView.swift; sourceTree = "<group>"; };
@@ -71,6 +74,7 @@
 		F9A2197E29266ACA0079A4BE /* Subway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subway.swift; sourceTree = "<group>"; };
 		F9A2198129266B6D0079A4BE /* MapSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettings.swift; sourceTree = "<group>"; };
 		F9A2198429266CF30079A4BE /* CGContext+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGContext+Extensions.swift"; sourceTree = "<group>"; };
+		F9B3E84B294A2C0F00D0842C /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
 		F9EBC3382938BD06006FF027 /* Coordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
 		F9FE6A1029290839002413C4 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		F9FE6A1229294407002413C4 /* RouteWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteWatcher.swift; sourceTree = "<group>"; };
@@ -168,6 +172,8 @@
 				F998EA6F2940CC87000E32A6 /* DistanceCalculator.swift */,
 				F998EA712940E40F000E32A6 /* TimeCalculator.swift */,
 				F998EA73294200D5000E32A6 /* RouteDetailsView.swift */,
+				F9B3E84B294A2C0F00D0842C /* CardsView.swift */,
+				F995A0C0294B4AD1003E9D30 /* CardView.swift */,
 			);
 			path = Route;
 			sourceTree = "<group>";
@@ -309,6 +315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F96809AB2923B9DE0096D9CE /* ViewController.swift in Sources */,
+				F995A0C1294B4AD1003E9D30 /* CardView.swift in Sources */,
 				F97577792928ECC30069B4DD /* Area.swift in Sources */,
 				F998EA74294200D5000E32A6 /* RouteDetailsView.swift in Sources */,
 				F9A2197D292633770079A4BE /* MapView.swift in Sources */,
@@ -328,6 +335,7 @@
 				F998EA722940E40F000E32A6 /* TimeCalculator.swift in Sources */,
 				F9A2197F29266ACA0079A4BE /* Subway.swift in Sources */,
 				F9FE6A1329294407002413C4 /* RouteWatcher.swift in Sources */,
+				F9B3E84E294A2C0F00D0842C /* CardsView.swift in Sources */,
 				F944FB98293F41050097F845 /* RoutesView.swift in Sources */,
 				F99A0FD1293AAF88002E8760 /* UILabel+Extensions.swift in Sources */,
 				F97577752928E0960069B4DD /* SubwayLoader.swift in Sources */,

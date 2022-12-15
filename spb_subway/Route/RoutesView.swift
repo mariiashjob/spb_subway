@@ -8,17 +8,18 @@
 import UIKit
 import Foundation
 
-class RoutesView: UIStackView {
+class RoutesView: UIView {
     
     let timeView = UIView()
     let timeLabel = UILabel()
-    let routesView = UIView()
+    let transitsView = UIView()
     let transferLabel = UILabel()
     let detailsScrollView = UIScrollView()
     var subwayNumberLabels = [UILabel]()
     var routeWatcher: RouteWatcher?
     var subway: Subway?
     var isFooterUp: Bool = false
+    lazy var cardsView = CardsView(routeWatcher)
     lazy var routeDetailsView = RouteDetailsView(routeWatcher)
     
     convenience init(routeWatcher: RouteWatcher?) {
@@ -32,26 +33,27 @@ class RoutesView: UIStackView {
     }
     
     private func configure() {
-        self.axis = .vertical
-        self.distribution = .fillEqually
-        self.spacing = 3
         timeLabel.font = timeLabel.font.withSize(20.0)
         timeView.addSubview(timeLabel)
-        routesView.addSubview(transferLabel)
-        self.addArrangedSubview(timeView)
-        self.addArrangedSubview(routesView)
+        transitsView.addSubview(transferLabel)
         configureFrames()
-        configureScrollView()
+        configureCardsView()
+        configureRouteDetailsView()
     }
     
-    private func configureScrollView() {
+    private func configureCardsView() {
+        self.addSubview(cardsView)
+    }
+    
+    private func configureRouteDetailsView() {
         if self.isFooterUp {
             routeDetailsView.alpha = 1
             detailsScrollView.addSubview(routeDetailsView)
             detailsScrollView.contentSize = CGSize(width: self.bounds.width, height: routeDetailsView.bounds.height)
-            self.addArrangedSubview(detailsScrollView)
-            detailsScrollView.center = CGPoint(x: self.center.x, y: self.center.y + detailsScrollView.bounds.height / 2 + 20.0)
+            detailsScrollView.center = CGPoint(x: self.center.x, y: self.center.y + detailsScrollView.bounds.height / 2 + cardsView.bounds.height / 2)
             detailsScrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            detailsScrollView.isUserInteractionEnabled = true
+            self.addSubview(detailsScrollView)
         }
     }
     
@@ -68,6 +70,11 @@ class RoutesView: UIStackView {
         else {
             return
         }
+    
+        cardsView.removeFromSuperview()
+        cardsView =  CardsView(routeWatcher)
+        self.addSubview(cardsView)
+        
         let route = routeWatcher.routes[routeId]
         let size = 20.0
         var delay = 0.0
@@ -77,7 +84,8 @@ class RoutesView: UIStackView {
         transferLabel.text = (route.segments.count - 1).transferCountToString()
         transferLabel.font = transferLabel.font.withSize(MapSettings.fontLargeSize)
         delay = transferLabel.bounds.width
-        routesView.addSubview(transferLabel)
+        transitsView.addSubview(transferLabel)
+        
         for (index, segment) in route.segments.enumerated() {
             let label = UILabel()
             let line = subway.getLineById(segment.lineId)
@@ -95,7 +103,7 @@ class RoutesView: UIStackView {
             label.layer.cornerRadius = AttributesConstants.cornerRadius
             label.clipsToBounds = true
             subwayNumberLabels.append(label)
-            routesView.addSubview(label)
+            transitsView.addSubview(label)
             delay += size
             if index < route.segments.count - 1 {
                 let label = UILabel()
@@ -109,10 +117,12 @@ class RoutesView: UIStackView {
                 label.text = Symbols.whiteTriangle
                 label.textColor = Colors.backgroundColor
                 subwayNumberLabels.append(label)
-                routesView.addSubview(label)
+                transitsView.addSubview(label)
             }
             delay += size
         }
+        
+        
         if isFooterUp {
             self.isFooterUp = isFooterUp
             layoutSubviews()
@@ -126,12 +136,19 @@ class RoutesView: UIStackView {
             width: superview?.bounds.width ?? 0.0,
             height: superview?.bounds.height ?? 0.0)
         let arrangedSubviewWidth = self.bounds.width
-        let arrangedSubviewHeight = self.bounds.height / 3
-        timeView.frame = CGRect(
+        let arrangedSubviewHeight = self.bounds.height
+        cardsView.frame = CGRect(
             x: 0,
             y: 0,
-            width: arrangedSubviewWidth,
+            width: arrangedSubviewWidth * 3,
             height: arrangedSubviewHeight)
+        cardsView.center = self.center
+        detailsScrollView.frame = CGRect(
+            x: 0,
+            y: arrangedSubviewHeight,
+            width: arrangedSubviewWidth,
+            height: 550.0) // TODO: needed to be calqulated
+        
         timeLabel.frame = CGRect(
             x: 0,
             y: 0,
@@ -143,16 +160,6 @@ class RoutesView: UIStackView {
             width: arrangedSubviewWidth / 2,
             height: 20.0
         )
-        routesView.frame = CGRect(
-            x: 0,
-            y: arrangedSubviewHeight,
-            width: arrangedSubviewWidth,
-            height: arrangedSubviewHeight)
-        detailsScrollView.frame = CGRect(
-            x: 0,
-            y: arrangedSubviewHeight * 2,
-            width: arrangedSubviewWidth,
-            height: 550.0) // TODO: needed to be calqulated
     }
 }
 

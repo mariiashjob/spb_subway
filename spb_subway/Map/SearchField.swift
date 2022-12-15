@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 
 class SearchField: UITextField {
-    
+
     var textPadding = UIEdgeInsets(
         top: 5,
         left: 10,
@@ -19,7 +19,6 @@ class SearchField: UITextField {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         for view in subviews {
             if let button = view as? UIButton {
                 let image = UIImage(named: "close")

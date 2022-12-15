@@ -27,6 +27,13 @@ struct MapScaleConstants {
     static let originScale = 1.0
 }
 
+struct FooterAnimation {
+    static let duration = 0.5
+    static let delay = 0.0
+    static let damping = 1.0
+    static let velocity = 0.3
+}
+
 struct AttributesConstants {
     static let cornerRadius = 10.0
     static let alpha = 0.8
@@ -52,4 +59,8 @@ struct Symbols {
     static let bullet: String = "\u{2022}"
     static let whiteTriangle: String = "\u{25B7}"
     static let blackTriangle: String = "\u{25B6}"
+}
+
+enum Images: String {
+    case line = "line"
 }

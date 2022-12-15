@@ -46,7 +46,7 @@ class RouteDetailsView: UIView {
             return
         }
         let x = 100.0
-        var y = 30.0
+        var y = 0.0
         var allSegemntsPoints: [[Point]] = [[]]
         for segment in route.segments {
             var points: [Point] = []

@@ -18,17 +18,17 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
     @IBOutlet weak var fromTextField: SearchField!
     @IBOutlet weak var toTextField: SearchField!
     @IBOutlet weak var infoView: UIView!
-    @IBOutlet weak var changeButton: UIButton!
     private var currentField: UITextField?
     private var currentMapFrame: CGRect?
     private var searchFieldView: UIView?
     private var searchLabel: UILabel?
-    let map = MapView()
     lazy var routesView = RoutesView(routeWatcher: self.map.routeWatcher)
     var searchField: SearchField?
     var isKeyboardUp: Bool = false
     var isFooterUp: Bool = false
+    var isFooterUpdated: Bool = true
     var keyboardHeight: CGFloat = 0.0
+    let map = MapView()
     
     private var mapFrame: CGRect {
         if let frame = currentMapFrame {
@@ -63,16 +63,19 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
         fromTextField.delegate = self
         toTextField.delegate = self
         fromTextField.attributedPlaceholder = Texts.fromText.attributedPlaceholder()
+        fromTextField.clearButtonMode = .never
         toTextField.attributedPlaceholder = Texts.toText.attributedPlaceholder()
+        toTextField.clearButtonMode = .never
         footerView.layer.cornerRadius = AttributesConstants.cornerRadius
         contentView.layer.cornerRadius = AttributesConstants.cornerRadius
         contentView.addSubview(map)
         map.frame = mapFrame
-        lineImageView.image = UIImage(named: "line")
+        lineImageView.image = UIImage(named: Images.line.rawValue)
         lineImageView.backgroundColor = nil
-        configureFooterView()
+        lineImageView.isUserInteractionEnabled = true
         addGestures()
-        if infoView.alpha == 1.0 {
+        configureFooterView()
+        if !map.routeWatcher.routes.isEmpty {
             infoView.addSubview(routesView)
         }
         // TODO: bug - stations are not highlighted after foreground app state
@@ -83,11 +86,8 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
         switch(textField as? SearchField) {
         case fromTextField:
             map.routeWatcher.clearStationFrom()
-            // TODO: Bug - fields are jumping while clear one of them
-            //showSearchField(placeholder: textField.placeholder)
         case toTextField:
             map.routeWatcher.clearStationto()
-            //showSearchField(placeholder: textField.placeholder)
         case searchField:
             searchField?.text = nil
             map.routeWatcher.clearCurrentDirection()
@@ -127,6 +127,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
         // TODO: Bug - current station does not disappear from map after return with keyboard
         map.updateMapLabels()
         directionFieldsView.alpha = 1
+        lineImageView.alpha = 1
         isFooterUp = false
         return self.endEditing(true)
         // TODO: Bug - keyboard is not closed after done button pressed while seaarch field has not been edited
@@ -141,9 +142,24 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
     @IBAction func changeDirections(_ sender: Any) {
         fromTextField.text = map.routeWatcher.stationTo?.name
         toTextField.text = map.routeWatcher.stationFrom?.name
+        isFooterUpdated = false
         map
             .updateMapLabels()
             .routeWatcher.changeStations()
+    }
+    
+    @objc private func didSwipe(_ gesture: UISwipeGestureRecognizer) {
+        guard !map.routeWatcher.routes.isEmpty else {
+            return
+        }
+        if isFooterUp && gesture.direction == .down {
+            isFooterUp = false
+        } else if !isFooterUp && gesture.direction == .up {
+            isFooterUp = true
+        }
+        isFooterUpdated = true
+        map.updateMapContent()
+        layoutSubviews()
     }
     
     @objc private func didTap(_ gesture: UITapGestureRecognizer) {
@@ -195,34 +211,6 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
         currentMapFrame = map.frame
     }
     
-    @objc private func didSwipe(_ swipeGesture: UISwipeGestureRecognizer) {
-        var locationOfBeganSwipe = CGPoint()
-        if swipeGesture.state == .ended {
-            locationOfBeganSwipe = swipeGesture.location(ofTouch: 0, in: self)
-        }
-        let y = locationOfBeganSwipe.y
-        let maxRouteId = map.routeWatcher.routes.count - 1
-        if swipeGesture.direction == .right {
-            if map.routeWatcher.routeId == 0 {
-                map.routeWatcher.routeId = maxRouteId
-            } else {
-                map.routeWatcher.routeId -= 1
-            }
-        } else if swipeGesture.direction == .left {
-            if map.routeWatcher.routeId == maxRouteId {
-                map.routeWatcher.routeId = 0
-            } else {
-                map.routeWatcher.routeId += 1
-            }
-        } else if swipeGesture.direction == .up && self.center.y < footerView.frame.minY{
-            isFooterUp = true
-        } else if swipeGesture.direction == .down && y < footerView.frame.minY + fieldsView.frame.maxY {
-            isFooterUp = false
-       }
-        map.updateMapContent()
-        layoutSubviews()
-    }
-    
     internal func updateRouteInfo() {
         routesView.updateRouteInfo(subway: map.subway, routeId: map.routeWatcher.routeId, isFooterUp: isFooterUp)
         routesView.routeDetailsView.redrawDetailedRoute(subway: map.subway, routeId: map.routeWatcher.routeId)
@@ -246,35 +234,77 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
                 x: 0,
                 y: self.bounds.height - keyboardHeight - (footerViewHeight - AttributesConstants.cornerRadius),
                 width: self.bounds.width,
-                height: footerViewHeight
-            )
+                height: footerViewHeight)
             infoView.alpha = 0
         } else if map.routeWatcher.routes.isEmpty {
-            footerView.frame = CGRect(
-                x: 0,
-                y: self.bounds.height - footerViewHeight,
-                width: self.bounds.width,
-                height: footerViewHeight
-            )
-            infoView.alpha = 0
+            UIView.animate(
+                withDuration: FooterAnimation.duration,
+                delay: FooterAnimation.delay,
+                usingSpringWithDamping: FooterAnimation.damping,
+                initialSpringVelocity: FooterAnimation.velocity,
+                options: [.beginFromCurrentState, .transitionCurlDown],
+                animations: {
+                    self.footerView.frame = CGRect(
+                        x: 0,
+                        y: self.bounds.height - footerViewHeight,
+                        width: self.bounds.width,
+                        height: footerViewHeight)
+                    self.infoView.alpha = 0
+            })
         } else if isFooterUp {
-            footerView.frame = CGRect(
-                x: 0,
-                y: footerViewHeight,
-                width: self.bounds.width,
-                height: self.bounds.height
-            )
-            infoView.alpha = 1
+            if isFooterUpdated {
+                UIView.animate(
+                    withDuration: FooterAnimation.duration,
+                    delay: FooterAnimation.delay,
+                    usingSpringWithDamping: FooterAnimation.damping,
+                    initialSpringVelocity: FooterAnimation.velocity,
+                    options: [.beginFromCurrentState],
+                    animations: {
+                    self.footerView.frame = CGRect(
+                        x: 0,
+                        y: footerViewHeight,
+                        width: self.bounds.width,
+                        height: self.bounds.height)
+                    self.infoView.alpha = 1
+                    self.routesView.detailsScrollView.alpha = 1
+                })
+            } else {
+                self.footerView.frame = CGRect(
+                    x: 0,
+                    y: footerViewHeight,
+                    width: self.bounds.width,
+                    height: self.bounds.height)
+                self.infoView.alpha = 1
+                self.routesView.detailsScrollView.alpha = 1
+            }
+            
         } else {
             footerViewHeight *= 2
-            footerView.frame = CGRect(
-                x: 0,
-                y: self.bounds.height - footerViewHeight,
-                width: self.bounds.width,
-                height: footerViewHeight
-            )
-            infoView.alpha = 1
-            routesView.routeDetailsView.alpha = 0
+            if isFooterUpdated {
+                UIView.animate(
+                    withDuration: FooterAnimation.duration,
+                    delay: FooterAnimation.delay,
+                    usingSpringWithDamping: FooterAnimation.damping,
+                    initialSpringVelocity: FooterAnimation.velocity,
+                    options: [.beginFromCurrentState, .transitionCurlDown],
+                    animations: {
+                    self.footerView.frame = CGRect(
+                        x: 0,
+                        y: self.bounds.height - footerViewHeight,
+                        width: self.bounds.width,
+                        height: footerViewHeight)
+                    self.infoView.alpha = 1
+                    self.routesView.detailsScrollView.alpha = 0
+                })
+            } else {
+                self.footerView.frame = CGRect(
+                    x: 0,
+                    y: self.bounds.height - footerViewHeight,
+                    width: self.bounds.width,
+                    height: footerViewHeight)
+                self.infoView.alpha = 1
+                self.routesView.detailsScrollView.alpha = 0
+            }
         }
     }
     
@@ -283,28 +313,23 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
         let panGecture = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
         let tapFromfieldGecture = UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))
         let tapToFieldGecture = UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))
-        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
-        swipeRightGesture.direction = .right
-        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
-        swipeLeftGesture.direction = .left
-        let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
-        swipeUpGesture.direction = .up
-        let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
-        swipeDownGesture.direction = .down
         contentView.addGestureRecognizer(pinchGecture)
         contentView.addGestureRecognizer(panGecture)
         fromTextField.addGestureRecognizer(tapFromfieldGecture)
         toTextField.addGestureRecognizer(tapToFieldGecture)
-        footerView.addGestureRecognizer(swipeRightGesture)
-        footerView.addGestureRecognizer(swipeLeftGesture)
-        footerView.addGestureRecognizer(swipeUpGesture)
-        footerView.addGestureRecognizer(swipeDownGesture)
+        let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
+        swipeUpGesture.direction = .up
+        let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
+        swipeDownGesture.direction = .down
+        lineImageView.addGestureRecognizer(swipeUpGesture)
+        lineImageView.addGestureRecognizer(swipeDownGesture)
     }
     
     private func showSearchField(placeholder: String?) {
         map.routeWatcher.updateCurrentDirection(currentField == fromTextField)
         // TODO: add animations for all alpha events
         directionFieldsView.alpha = 0
+        lineImageView.alpha = 0
         if let searchFieldView = searchFieldView, let searchField = searchField {
             searchFieldView.alpha = 1
             searchLabel?.text = placeholder
