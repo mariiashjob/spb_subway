@@ -34,8 +34,8 @@ class RouteDetailsView: UIView {
             for nameLabel in labels {
                 nameLabel.removeFromSuperview()
             }
-            for infoView in infoViews {
-                infoView.removeFromSuperview()
+            for walkInfoView in infoViews {
+                walkInfoView.removeFromSuperview()
             }
             labels.removeAll()
         }
@@ -109,19 +109,19 @@ class RouteDetailsView: UIView {
             }
             y += 10.0
             if segment != route.segments.last {
-                let infoView = UIView()
-                infoView.frame = CGRect (
+                let walkInfoView = UIView()
+                walkInfoView.frame = CGRect (
                     x: lineX,
                     y: y,
                     width: 200.0,
                     height: 60.0
                 )
-                infoView.layer.cornerRadius = infoView.bounds.width / 20
-                infoView.clipsToBounds = true
-                infoView.layer.borderWidth = 1.0
-                infoView.layer.borderColor = Colors.backgroundColor.cgColor
-                infoViews.append(infoView)
-                self.addSubview(infoView)
+                walkInfoView.layer.cornerRadius = walkInfoView.bounds.width / 20
+                walkInfoView.clipsToBounds = true
+                walkInfoView.layer.borderWidth = 1.0
+                walkInfoView.layer.borderColor = Colors.backgroundColor.cgColor
+                infoViews.append(walkInfoView)
+                self.addSubview(walkInfoView)
                 
                 let infoLabel = UILabel()
                 infoLabel.frame = CGRect (
@@ -132,9 +132,9 @@ class RouteDetailsView: UIView {
                 )
                 infoLabel.text = Texts.transfer
                 infoLabel.font = infoLabel.font.withSize(12.0)
-                infoView.addSubview(infoLabel)
+                walkInfoView.addSubview(infoLabel)
                 labels.append(infoLabel)
-                y += 20.0 + infoView.bounds.height
+                y += 20.0 + walkInfoView.bounds.height
                 let imageView = UIImageView()
                 imageView.frame = CGRect (
                     x: 30,
@@ -144,13 +144,13 @@ class RouteDetailsView: UIView {
                 )
                 let image = UIImage(named: "man")
                 imageView.image = image
-                infoView.addSubview(imageView)
+                walkInfoView.addSubview(imageView)
                 
                 let walkTimeLabel = UILabel()
                 walkTimeLabel.text = "3 мин"
                 walkTimeLabel.textColor = Colors.backgroundColor
                 walkTimeLabel.font = walkTimeLabel.font.withSize(12.0)
-                infoView.addSubview(walkTimeLabel)
+                walkInfoView.addSubview(walkTimeLabel)
                 labels.append(walkTimeLabel)
                 walkTimeLabel.frame = CGRect (
                     x: 60,

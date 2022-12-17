@@ -22,7 +22,7 @@
 		F9760384292504090035CEB4 /* MapContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9760383292504090035CEB4 /* MapContentView.swift */; };
 		F9760386292504180035CEB4 /* MapContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9760385292504180035CEB4 /* MapContentView.xib */; };
 		F9760388292509E10035CEB4 /* SearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9760387292509E10035CEB4 /* SearchField.swift */; };
-		F995A0C1294B4AD1003E9D30 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F995A0C0294B4AD1003E9D30 /* CardView.swift */; };
+		F995A0C1294B4AD1003E9D30 /* CardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F995A0C0294B4AD1003E9D30 /* CardCollectionViewCell.swift */; };
 		F998EA702940CC87000E32A6 /* DistanceCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F998EA6F2940CC87000E32A6 /* DistanceCalculator.swift */; };
 		F998EA722940E40F000E32A6 /* TimeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F998EA712940E40F000E32A6 /* TimeCalculator.swift */; };
 		F998EA74294200D5000E32A6 /* RouteDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F998EA73294200D5000E32A6 /* RouteDetailsView.swift */; };
@@ -35,7 +35,7 @@
 		F9A2197F29266ACA0079A4BE /* Subway.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A2197E29266ACA0079A4BE /* Subway.swift */; };
 		F9A2198229266B6D0079A4BE /* MapSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A2198129266B6D0079A4BE /* MapSettings.swift */; };
 		F9A2198529266CF30079A4BE /* CGContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A2198429266CF30079A4BE /* CGContext+Extensions.swift */; };
-		F9B3E84E294A2C0F00D0842C /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B3E84B294A2C0F00D0842C /* CardsView.swift */; };
+		F9B3E84E294A2C0F00D0842C /* CardsUICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B3E84B294A2C0F00D0842C /* CardsUICollectionView.swift */; };
 		F9EBC3392938BD06006FF027 /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBC3382938BD06006FF027 /* Coordinates.swift */; };
 		F9FE6A1129290839002413C4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE6A1029290839002413C4 /* Data.swift */; };
 		F9FE6A1329294407002413C4 /* RouteWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE6A1229294407002413C4 /* RouteWatcher.swift */; };
@@ -57,11 +57,11 @@
 		F96F1847292E5F5300B4C275 /* StationLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationLabel.swift; sourceTree = "<group>"; };
 		F97577742928E0960069B4DD /* SubwayLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwayLoader.swift; sourceTree = "<group>"; };
 		F97577782928ECC30069B4DD /* Area.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Area.swift; sourceTree = "<group>"; };
-		F97603812924E1F50035CEB4 /* spb_subway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = spb_subway.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F97603812924E1F50035CEB4 /* spb_subway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = spb_subway.app; path = "/Users/m.shirokova/Documents/iOS_DEV/diploma_project/spb_subway/build/Debug-iphoneos/spb_subway.app"; sourceTree = "<absolute>"; };
 		F9760383292504090035CEB4 /* MapContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapContentView.swift; sourceTree = "<group>"; };
 		F9760385292504180035CEB4 /* MapContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapContentView.xib; sourceTree = "<group>"; };
 		F9760387292509E10035CEB4 /* SearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchField.swift; sourceTree = "<group>"; };
-		F995A0C0294B4AD1003E9D30 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		F995A0C0294B4AD1003E9D30 /* CardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionViewCell.swift; sourceTree = "<group>"; };
 		F998EA6F2940CC87000E32A6 /* DistanceCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceCalculator.swift; sourceTree = "<group>"; };
 		F998EA712940E40F000E32A6 /* TimeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCalculator.swift; sourceTree = "<group>"; };
 		F998EA73294200D5000E32A6 /* RouteDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDetailsView.swift; sourceTree = "<group>"; };
@@ -74,7 +74,7 @@
 		F9A2197E29266ACA0079A4BE /* Subway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subway.swift; sourceTree = "<group>"; };
 		F9A2198129266B6D0079A4BE /* MapSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettings.swift; sourceTree = "<group>"; };
 		F9A2198429266CF30079A4BE /* CGContext+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGContext+Extensions.swift"; sourceTree = "<group>"; };
-		F9B3E84B294A2C0F00D0842C /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
+		F9B3E84B294A2C0F00D0842C /* CardsUICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsUICollectionView.swift; sourceTree = "<group>"; };
 		F9EBC3382938BD06006FF027 /* Coordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
 		F9FE6A1029290839002413C4 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		F9FE6A1229294407002413C4 /* RouteWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteWatcher.swift; sourceTree = "<group>"; };
@@ -115,7 +115,6 @@
 				F96809A52923B9DE0096D9CE /* spb_subway */,
 				E36015DEC3B8541008D6A327 /* Pods */,
 				8F3303A543F9E732EEBD1C0A /* Frameworks */,
-				F97603812924E1F50035CEB4 /* spb_subway.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -165,15 +164,10 @@
 		F99A74CC2930E04600F51BF9 /* Route */ = {
 			isa = PBXGroup;
 			children = (
-				F9FE6A1229294407002413C4 /* RouteWatcher.swift */,
-				F99A74C82930CD6600F51BF9 /* RouteCalculator.swift */,
-				F99A74CD2930E5B300F51BF9 /* Route.swift */,
-				F944FB97293F41050097F845 /* RoutesView.swift */,
-				F998EA6F2940CC87000E32A6 /* DistanceCalculator.swift */,
-				F998EA712940E40F000E32A6 /* TimeCalculator.swift */,
-				F998EA73294200D5000E32A6 /* RouteDetailsView.swift */,
-				F9B3E84B294A2C0F00D0842C /* CardsView.swift */,
-				F995A0C0294B4AD1003E9D30 /* CardView.swift */,
+				F9A60C8C294CC86F00B7C54C /* watchers */,
+				F9A60C8B294CC85700B7C54C /* views */,
+				F9A60C8A294CC84600B7C54C /* models */,
+				F9A60C89294CC82F00B7C54C /* calculators */,
 			);
 			path = Route;
 			sourceTree = "<group>";
@@ -196,6 +190,43 @@
 				F944FB99293F51610097F845 /* UIButton+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F9A60C89294CC82F00B7C54C /* calculators */ = {
+			isa = PBXGroup;
+			children = (
+				F998EA712940E40F000E32A6 /* TimeCalculator.swift */,
+				F998EA6F2940CC87000E32A6 /* DistanceCalculator.swift */,
+				F99A74C82930CD6600F51BF9 /* RouteCalculator.swift */,
+			);
+			path = calculators;
+			sourceTree = "<group>";
+		};
+		F9A60C8A294CC84600B7C54C /* models */ = {
+			isa = PBXGroup;
+			children = (
+				F99A74CD2930E5B300F51BF9 /* Route.swift */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		F9A60C8B294CC85700B7C54C /* views */ = {
+			isa = PBXGroup;
+			children = (
+				F998EA73294200D5000E32A6 /* RouteDetailsView.swift */,
+				F9B3E84B294A2C0F00D0842C /* CardsUICollectionView.swift */,
+				F995A0C0294B4AD1003E9D30 /* CardCollectionViewCell.swift */,
+				F944FB97293F41050097F845 /* RoutesView.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		F9A60C8C294CC86F00B7C54C /* watchers */ = {
+			isa = PBXGroup;
+			children = (
+				F9FE6A1229294407002413C4 /* RouteWatcher.swift */,
+			);
+			path = watchers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -315,7 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F96809AB2923B9DE0096D9CE /* ViewController.swift in Sources */,
-				F995A0C1294B4AD1003E9D30 /* CardView.swift in Sources */,
+				F995A0C1294B4AD1003E9D30 /* CardCollectionViewCell.swift in Sources */,
 				F97577792928ECC30069B4DD /* Area.swift in Sources */,
 				F998EA74294200D5000E32A6 /* RouteDetailsView.swift in Sources */,
 				F9A2197D292633770079A4BE /* MapView.swift in Sources */,
@@ -335,7 +366,7 @@
 				F998EA722940E40F000E32A6 /* TimeCalculator.swift in Sources */,
 				F9A2197F29266ACA0079A4BE /* Subway.swift in Sources */,
 				F9FE6A1329294407002413C4 /* RouteWatcher.swift in Sources */,
-				F9B3E84E294A2C0F00D0842C /* CardsView.swift in Sources */,
+				F9B3E84E294A2C0F00D0842C /* CardsUICollectionView.swift in Sources */,
 				F944FB98293F41050097F845 /* RoutesView.swift in Sources */,
 				F99A0FD1293AAF88002E8760 /* UILabel+Extensions.swift in Sources */,
 				F97577752928E0960069B4DD /* SubwayLoader.swift in Sources */,

@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SwiftUI
 
-class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRecognizerDelegate {
+class MapContentView: UIView, UITextFieldDelegate, UIGestureRecognizerDelegate, MapViewDelegate {
     
     @IBOutlet weak var cityName: UILabel!
     @IBOutlet weak var contentView: UIView!
@@ -22,13 +23,13 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
     private var currentMapFrame: CGRect?
     private var searchFieldView: UIView?
     private var searchLabel: UILabel?
-    lazy var routesView = RoutesView(routeWatcher: self.map.routeWatcher)
     var searchField: SearchField?
     var isKeyboardUp: Bool = false
     var isFooterUp: Bool = false
     var isFooterUpdated: Bool = true
     var keyboardHeight: CGFloat = 0.0
     let map = MapView()
+    lazy var routesView = RoutesView(routeWatcher: self.map.routeWatcher)
     
     private var mapFrame: CGRect {
         if let frame = currentMapFrame {
@@ -59,6 +60,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        routesView.delegate = self
         map.delegate = self
         fromTextField.delegate = self
         toTextField.delegate = self
@@ -78,6 +80,7 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
         if !map.routeWatcher.routes.isEmpty {
             infoView.addSubview(routesView)
         }
+        addGestures()
         // TODO: bug - stations are not highlighted after foreground app state
     }
     
@@ -213,7 +216,10 @@ class MapContentView: UIView, UITextFieldDelegate, MapViewDelegate, UIGestureRec
     
     internal func updateRouteInfo() {
         routesView.updateRouteInfo(subway: map.subway, routeId: map.routeWatcher.routeId, isFooterUp: isFooterUp)
-        routesView.routeDetailsView.redrawDetailedRoute(subway: map.subway, routeId: map.routeWatcher.routeId)
+        routesView.routeDetailsView
+            .redrawDetailedRoute(
+                subway: map.subway, routeId: map.routeWatcher.routeId)
+        map.updateMapContent()
     }
     
     internal func updateCurrentStationField(station: Station?) {

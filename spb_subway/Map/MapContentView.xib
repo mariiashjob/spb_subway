@@ -90,8 +90,11 @@
                             <viewLayoutGuide key="safeArea" id="s3v-WI-qJO"/>
                         </stackView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Id0-QL-WRe">
-                            <rect key="frame" x="20" y="75" width="374" height="100"/>
+                            <rect key="frame" x="20" y="80" width="374" height="600"/>
                             <color key="backgroundColor" systemColor="systemYellowColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="600" id="gim-CZ-kC6"/>
+                            </constraints>
                         </view>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemYellowColor"/>
@@ -108,10 +111,9 @@
                         <constraint firstAttribute="trailing" secondItem="Id0-QL-WRe" secondAttribute="trailing" constant="20" id="dcw-KP-tFp"/>
                         <constraint firstItem="hrT-Ft-cgt" firstAttribute="leading" secondItem="sxc-ek-MSR" secondAttribute="leading" constant="10" id="eUf-ym-ud6"/>
                         <constraint firstItem="TAD-i4-oC2" firstAttribute="height" secondItem="sxc-ek-MSR" secondAttribute="height" multiplier="0.5" id="nKt-SJ-1ka"/>
-                        <constraint firstItem="Id0-QL-WRe" firstAttribute="height" secondItem="TAD-i4-oC2" secondAttribute="height" multiplier="2" id="pIZ-ew-j70"/>
                         <constraint firstItem="TAD-i4-oC2" firstAttribute="centerY" secondItem="sxc-ek-MSR" secondAttribute="centerY" id="s2C-aL-qSd"/>
                         <constraint firstItem="hrT-Ft-cgt" firstAttribute="top" secondItem="sxc-ek-MSR" secondAttribute="top" constant="5" id="sI1-eL-NZR"/>
-                        <constraint firstItem="Id0-QL-WRe" firstAttribute="top" secondItem="TAD-i4-oC2" secondAttribute="bottom" id="sLB-Ii-aI7"/>
+                        <constraint firstItem="Id0-QL-WRe" firstAttribute="top" secondItem="TAD-i4-oC2" secondAttribute="bottom" constant="5" id="sLB-Ii-aI7"/>
                         <constraint firstAttribute="trailing" secondItem="zk8-bU-jjA" secondAttribute="trailing" id="sQ2-jB-siX"/>
                     </constraints>
                 </view>

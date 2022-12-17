@@ -37,12 +37,11 @@ class MapView: UIView, RouteCalculatorDelegate {
     // TODO: Bug - right line stations labels are disabled
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        if let isFooterUp = delegate?.isFooterUp, isFooterUp == true {
+        if let isFooterUp = delegate?.isFooterUp, isFooterUp {
             delegate?.updateRouteInfo()
         }
         drawMap(routeWatcher.routeId)
         addStationsAndLinesLabelsIfNeeded()
-        updateMapLabels()
     }
     
     func updateMapContent() {
