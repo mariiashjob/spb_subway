@@ -14,7 +14,7 @@ final class CardsUICollectionView: UICollectionView, UICollectionViewDelegate, U
     var mapDelegate: MapViewDelegate?
     var isCardViewSet: Bool = false
     
-    init(routeWatcher: RouteWatcher?, subway: Subway?, mapDelegate: MapViewDelegate?) {
+    init(routeWatcher: RouteWatcher? = nil, subway: Subway? = nil, mapDelegate: MapViewDelegate? = nil) {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         super.init(frame: .zero, collectionViewLayout: layout)
@@ -28,8 +28,12 @@ final class CardsUICollectionView: UICollectionView, UICollectionViewDelegate, U
         delegate = self
         dataSource = self
         register(CardCollectionViewCell.self, forCellWithReuseIdentifier: CardCollectionViewCell.reuseId)
-        layout.minimumLineSpacing = Constants.minimumLineSpacing
-        contentInset = UIEdgeInsets(top: 0, left: Constants.leftDistancetoView, bottom: 0, right: Constants.rightDistancetoView)
+        layout.minimumLineSpacing = CardsAttributes.minimumLineSpacing
+        contentInset = UIEdgeInsets(
+            top: CardsAttributes.topDistancetoView,
+            left: CardsAttributes.leftDistancetoView,
+            bottom: CardsAttributes.bottomDistancetoView,
+            right: CardsAttributes.rightDistancetoView)
     }
     
     required init?(coder: NSCoder) {
@@ -56,7 +60,7 @@ final class CardsUICollectionView: UICollectionView, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: super.bounds.width, height: 100.0)
+        return CGSize(width: super.bounds.width, height: CardsAttributes.cardHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -68,10 +72,4 @@ final class CardsUICollectionView: UICollectionView, UICollectionViewDelegate, U
             return
         }
     }
-}
-
-struct Constants {
-    static let leftDistancetoView: CGFloat = 0.0
-    static let rightDistancetoView: CGFloat = 0.0
-    static let minimumLineSpacing: CGFloat = 0.0
 }

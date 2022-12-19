@@ -37,6 +37,7 @@ struct FooterAnimation {
 struct AttributesConstants {
     static let cornerRadius = 10.0
     static let alpha = 0.8
+    static let spacing = 20.0
 }
 
 struct Texts {
@@ -63,4 +64,16 @@ struct Symbols {
 
 enum Images: String {
     case line = "line"
+}
+
+struct CardsAttributes {
+    static let pointWidth: CGFloat = 5.0
+    static let pointHeight: CGFloat = 5.0
+    static let pointsViewHeight: CGFloat = 5.0
+    static let cardHeight: CGFloat = 80.0
+    static let leftDistancetoView: CGFloat = 0.0
+    static let rightDistancetoView: CGFloat = 0.0
+    static let topDistancetoView: CGFloat = 10.0
+    static let bottomDistancetoView: CGFloat = 0.0
+    static let minimumLineSpacing: CGFloat = 0.0
 }

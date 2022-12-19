@@ -17,6 +17,8 @@ class RoutesView: UIView {
     var detailsScrollView = UIScrollView()
     var isFooterUp: Bool = false
     lazy var routeDetailsView = RouteDetailsView(routeWatcher)
+    lazy var pointsView = PointsView(routeWatcher)
+    lazy var cardsCollectionView = CardsUICollectionView()
     
     convenience init(routeWatcher: RouteWatcher?) {
         self.init(frame: .zero)
@@ -38,11 +40,17 @@ class RoutesView: UIView {
         self.addSubview(cardsView)
     }
     
+    private func configurePointsView() {
+        pointsView.removeFromSuperview()
+        pointsView = PointsView(routeWatcher)
+        addSubview(pointsView)
+    }
+    
     private func configureRouteDetailsView() {
         if self.isFooterUp {
             detailsScrollView.addSubview(routeDetailsView)
             detailsScrollView.contentSize = CGSize(width: self.bounds.width, height: routeDetailsView.bounds.height)
-            self.addSubview(detailsScrollView)
+            addSubview(detailsScrollView)
             detailsScrollView.showsVerticalScrollIndicator = false
             detailsScrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         }
@@ -56,10 +64,8 @@ class RoutesView: UIView {
             self.isFooterUp = isFooterUp
         }
         if routeWatcher.routeId == 0 {
-            for view in cardsView.subviews {
-                view.removeFromSuperview()
-            }
-            let cardsCollectionView = CardsUICollectionView(
+            cardsCollectionView.removeFromSuperview()
+            cardsCollectionView = CardsUICollectionView(
                 routeWatcher: routeWatcher,
                 subway: subway,
                 mapDelegate: delegate)
@@ -67,10 +73,10 @@ class RoutesView: UIView {
                 x: 0,
                 y: 0,
                 width: self.bounds.width,
-                height: 100.0
-            )
+                height: 100.0)
             cardsView.addSubview(cardsCollectionView)
         }
+        configurePointsView()
         layoutSubviews()
     }
     
@@ -83,15 +89,19 @@ class RoutesView: UIView {
             width: width,
             height: height
         )
-        cardsView.frame = CGRect(
-            x: 0,
+        pointsView.frame = CGRect(
+            x: 50.0,
             y: 0,
             width: width,
+            height: CardsAttributes.pointsViewHeight)
+        cardsView.frame = CGRect(
+            x: 0,
+            y: CardsAttributes.pointsViewHeight,
+            width: width,
             height: height)
-        cardsView.center = self.center
         detailsScrollView.frame = CGRect(
             x: 0,
-            y: 100.0,
+            y: cardsCollectionView.bounds.maxY + AttributesConstants.spacing,
             width: self.bounds.width,
             height: UIScreen.main.bounds.height * 0.6
         )

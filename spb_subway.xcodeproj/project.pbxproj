@@ -22,6 +22,7 @@
 		F9760384292504090035CEB4 /* MapContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9760383292504090035CEB4 /* MapContentView.swift */; };
 		F9760386292504180035CEB4 /* MapContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9760385292504180035CEB4 /* MapContentView.xib */; };
 		F9760388292509E10035CEB4 /* SearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9760387292509E10035CEB4 /* SearchField.swift */; };
+		F992A15F294F2ECC00268618 /* PointsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F992A15E294F2ECC00268618 /* PointsView.swift */; };
 		F995A0C1294B4AD1003E9D30 /* CardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F995A0C0294B4AD1003E9D30 /* CardCollectionViewCell.swift */; };
 		F998EA702940CC87000E32A6 /* DistanceCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F998EA6F2940CC87000E32A6 /* DistanceCalculator.swift */; };
 		F998EA722940E40F000E32A6 /* TimeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F998EA712940E40F000E32A6 /* TimeCalculator.swift */; };
@@ -57,10 +58,11 @@
 		F96F1847292E5F5300B4C275 /* StationLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationLabel.swift; sourceTree = "<group>"; };
 		F97577742928E0960069B4DD /* SubwayLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwayLoader.swift; sourceTree = "<group>"; };
 		F97577782928ECC30069B4DD /* Area.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Area.swift; sourceTree = "<group>"; };
-		F97603812924E1F50035CEB4 /* spb_subway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = spb_subway.app; path = "/Users/m.shirokova/Documents/iOS_DEV/diploma_project/spb_subway/build/Debug-iphoneos/spb_subway.app"; sourceTree = "<absolute>"; };
 		F9760383292504090035CEB4 /* MapContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapContentView.swift; sourceTree = "<group>"; };
 		F9760385292504180035CEB4 /* MapContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapContentView.xib; sourceTree = "<group>"; };
 		F9760387292509E10035CEB4 /* SearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchField.swift; sourceTree = "<group>"; };
+		F992A15B294F274400268618 /* spb_subway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = spb_subway.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F992A15E294F2ECC00268618 /* PointsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsView.swift; sourceTree = "<group>"; };
 		F995A0C0294B4AD1003E9D30 /* CardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionViewCell.swift; sourceTree = "<group>"; };
 		F998EA6F2940CC87000E32A6 /* DistanceCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceCalculator.swift; sourceTree = "<group>"; };
 		F998EA712940E40F000E32A6 /* TimeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCalculator.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				F96809A52923B9DE0096D9CE /* spb_subway */,
 				E36015DEC3B8541008D6A327 /* Pods */,
 				8F3303A543F9E732EEBD1C0A /* Frameworks */,
+				F992A15B294F274400268618 /* spb_subway.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -217,6 +220,7 @@
 				F9B3E84B294A2C0F00D0842C /* CardsUICollectionView.swift */,
 				F995A0C0294B4AD1003E9D30 /* CardCollectionViewCell.swift */,
 				F944FB97293F41050097F845 /* RoutesView.swift */,
+				F992A15E294F2ECC00268618 /* PointsView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -248,7 +252,7 @@
 			);
 			name = spb_subway;
 			productName = spb_subway;
-			productReference = F97603812924E1F50035CEB4 /* spb_subway.app */;
+			productReference = F992A15B294F274400268618 /* spb_subway.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -355,6 +359,7 @@
 				F9760388292509E10035CEB4 /* SearchField.swift in Sources */,
 				F9A2198229266B6D0079A4BE /* MapSettings.swift in Sources */,
 				F96809A72923B9DE0096D9CE /* AppDelegate.swift in Sources */,
+				F992A15F294F2ECC00268618 /* PointsView.swift in Sources */,
 				F96809A92923B9DE0096D9CE /* SceneDelegate.swift in Sources */,
 				F99A74D0293111D300F51BF9 /* String+Extensions.swift in Sources */,
 				F99A74CE2930E5B300F51BF9 /* Route.swift in Sources */,

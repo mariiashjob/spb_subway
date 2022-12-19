@@ -27,10 +27,10 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                         </view>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hrT-Ft-cgt">
-                            <rect key="frame" x="10" y="5" width="394" height="20"/>
+                            <rect key="frame" x="10" y="5" width="394" height="15"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="20" id="fI3-Ek-SjQ"/>
+                                <constraint firstAttribute="height" constant="15" id="fI3-Ek-SjQ"/>
                             </constraints>
                         </imageView>
                         <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" distribution="fillEqually" spacing="5" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TAD-i4-oC2">
