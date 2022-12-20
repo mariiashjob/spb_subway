@@ -44,10 +44,11 @@ class Subway {
     
 class Line: Equatable {
     static func == (lhs: Line, rhs: Line) -> Bool {
-        return true
+        return lhs.id == rhs.id && lhs.name == rhs.name && lhs.color == rhs.color
     }
     
     var id: Int
+    var number: Int?
     var name: String?
     var color: UIColor?
     lazy var points: [CGPoint] = {
@@ -90,9 +91,13 @@ class Line: Equatable {
     }
 }
 
-class Station {
+class Station: Equatable {
+    static func == (lhs: Station, rhs: Station) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
     var id: Float?
-    var lineId: Int?
+    var lineId: Int
     var routeId: Int?
     var nodes: [Station]
     var name: String
@@ -103,6 +108,7 @@ class Station {
     var isClosed: Bool?
     var isInRoute: Bool?
     var label: UILabel?
+    var color: UIColor?
     
     init?(data: NSDictionary) {
         guard let id = data["id"] as? String,
@@ -112,6 +118,7 @@ class Station {
               let order = data["order"] as? Int
              else { return nil }
         self.id = Float(id)
+        self.lineId = Int(id) ?? 0
         self.name = name
         self.lat = lat
         self.lng = lng
@@ -119,6 +126,12 @@ class Station {
         self.isClosed = false
         self.isInRoute = false
         self.nodes = [Station]()
+    }
+    
+    func color(lines: [Line]) -> UIColor? {
+        let color = lines.filter { $0.id == self.lineId }.first?.color
+        self.color = color
+        return color
     }
 }
 
@@ -155,17 +168,15 @@ extension Station {
                 y: coordinates.y * determinant.height)
         }
     }
-    
-    func color(lines: [Line]) -> UIColor? {
-        return lines.filter { $0.id == self.lineId }.first?.color
-    }
 }
 
 extension Subway {
     
     func determineStationsForSegment(_ segment: Segment) -> [Station] {
         var stations: [Station] = []
-        guard let start = segment.from, let end = segment.to, let line = segment.line(self) else {
+        let start = segment.from
+        let end = segment.to
+        guard let line = segment.line(self) else {
             return []
         }
         if start.order < end.order {
@@ -178,5 +189,9 @@ extension Subway {
             }.reversed()
         }
         return stations
+    }
+    
+    func getLineById(_ id: Int) -> Line? {
+        return self.lines.filter { $0.id == id }.first
     }
 }

@@ -8,8 +8,10 @@
 import UIKit
 
 protocol MapViewDelegate {
-    func updateCurrentStationField(station: Station?)
     var isFromFieldSelected: Bool { get set }
+    var isFooterUp: Bool { get set }
+    func updateRouteInfo()
+    func updateCurrentStationField(station: Station?)
 }
 
 class MapView: UIView, RouteCalculatorDelegate {
@@ -35,7 +37,19 @@ class MapView: UIView, RouteCalculatorDelegate {
     // TODO: Bug - right line stations labels are disabled
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        drawMap()
+        if let isFooterUp = delegate?.isFooterUp, isFooterUp {
+            delegate?.updateRouteInfo()
+        }
+        drawMap(routeWatcher.routeId)
+        addStationsAndLinesLabelsIfNeeded()
+    }
+    
+    func updateMapContent() {
+        updateMapLabels()
+        setNeedsDisplay()
+    }
+    
+    private func addStationsAndLinesLabelsIfNeeded() {
         if stationLabels.isEmpty && lineNumbersLabels.isEmpty {
             for (index, line) in subway.lines.enumerated() {
                 addLineNumberLabel(line: line, index: index)
@@ -43,12 +57,6 @@ class MapView: UIView, RouteCalculatorDelegate {
                 addStationsNodes()
             }
         }
-        updateMapLabels()
-    }
-    
-    func updateMap() {
-        updateMapLabels()
-        setNeedsDisplay()
     }
     
     private func addLineNumberLabel(line: Line, index: Int) {
@@ -118,9 +126,9 @@ class MapView: UIView, RouteCalculatorDelegate {
             stationNameLabel.paddingTop = 2.0
             stationNameLabel.paddingBottom = 2.0
             stationNameLabel.textColor = Colors.textColor
-            stationNameLabel.font = stationNameLabel.font.withSize(6.0)
+            stationNameLabel.font = stationNameLabel.font.withSize(MapSettings.fontSize)
             stationNameLabel.isUserInteractionEnabled = true
-            let delta = deltaCoordinates(station: node.first ?? "")
+            let delta = deltaLabelCoordinates(station: node.first ?? "")
             stationNameLabel.frame = CGRect(
                 x: coordinates.x + delta.x,
                 y: coordinates.y + delta.y,
@@ -147,7 +155,7 @@ class MapView: UIView, RouteCalculatorDelegate {
                 stationNameLabel.paddingTop = 2.0
                 stationNameLabel.paddingBottom = 2.0
                 stationNameLabel.textColor = Colors.textColor
-                stationNameLabel.font = stationNameLabel.font.withSize(8.0)
+                stationNameLabel.font = stationNameLabel.font.withSize(MapSettings.fontSize)
                 stationNameLabel.isUserInteractionEnabled = true
                 let delay = stationNameLabel.font.pointSize
                 var deltaX = 0.0
@@ -219,8 +227,6 @@ class MapView: UIView, RouteCalculatorDelegate {
         }
     }
     
-    // TODO: color after station selected (return key is pushed or view is panned down)
-    /// use delegate, create new function for it with UILable param
     @discardableResult
     func updateMapLabels() -> MapView {
         for numberLabel in lineNumbersLabels {
@@ -258,7 +264,7 @@ class MapView: UIView, RouteCalculatorDelegate {
         return self
     }
     
-    private func drawMap() {
+    private func drawMap(_ routeId: Int) {
         guard let context = UIGraphicsGetCurrentContext(), !subway.lines.isEmpty else {
             return
         }
@@ -268,19 +274,19 @@ class MapView: UIView, RouteCalculatorDelegate {
                 .completeSubwayСoordinates(subway)
                 .convertCoordinates(subway)
         }
+        
         for (index, line) in subway.lines.enumerated() {
             var alpha: CGFloat = MapSettings.alphaEnabled
             if !routeWatcher.routes.isEmpty {
                 alpha = MapSettings.alphaDisabled
+                delegate?.updateRouteInfo()
             }
-            line.color = colorById(index)
+            line.number = index + 1
             context
                 .setAttributes(color: line.color, alpha: alpha)
                 .drawLine(points: line.points)
         }
         print("-------------MAP IS BUILT-------------")
-        // TODO: show the first route for test - the logic should be replaced
-        let routeId = 0 // it is picked up from view
         guard
             let route = routeWatcher.routes.filter({$0.id == routeId}).first else {
             return removeDirectionLabels()
@@ -294,7 +300,7 @@ class MapView: UIView, RouteCalculatorDelegate {
             }
             context
                 .setAttributes(
-                    color: segment.color(subway),
+                    color: segment.color,
                     alpha: MapSettings.alphaEnabled)
                 .drawLine(points: points)
         }
@@ -304,29 +310,12 @@ class MapView: UIView, RouteCalculatorDelegate {
             return
         }
         removeDirectionLabels()
-        addDirectionLabel(station: startStation, text: "A")
-        addDirectionLabel(station: endStation, text: "B")
+        addDirectionLabel(station: startStation, text: Texts.fromStation)
+        addDirectionLabel(station: endStation, text: Texts.toStation)
         addToViewDirectionLabels()
     }
     
-    private func colorById(_ id: Int) -> UIColor {
-        switch(id + 1) {
-        case 1:
-            return .systemRed
-        case 2:
-            return .systemBlue
-        case 3:
-            return .systemGreen
-        case 4:
-            return .systemYellow
-        case 5:
-            return .systemPurple
-        default:
-            return .systemGray
-        }
-    }
-    
-    private func deltaCoordinates(station: String) -> CGPoint {
+    private func deltaLabelCoordinates(station: String) -> CGPoint {
         switch(station) {
         case "Площадь Восстания":
             return CGPoint(x: 30.0, y: 0.0)

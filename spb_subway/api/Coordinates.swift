@@ -81,7 +81,7 @@ class Coordinates {
         var stations = line.stations.filter{ $0.coordinates == nil }
         for (index, station) in stations.enumerated() {
             if index + 1 < stations.count, stations[index + 1].order - station.order > 1 {
-                for i in (index + 1)...stations.count - 1 {
+                for _ in (index + 1)...stations.count - 1 {
                 stations.remove(at: index + 1)
                 }
                 return stations
