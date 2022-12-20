@@ -10,6 +10,7 @@ import UIKit
 final class PointsView: UIView {
     
     var routeWatcher: RouteWatcher?
+    var superViewWidth: CGFloat = 0.0
     
     convenience init(_ routeWatcher: RouteWatcher?) {
         self.init(frame: CGRect.zero)
@@ -18,6 +19,7 @@ final class PointsView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.superViewWidth = super.frame.width
         configure()
     }
     
@@ -42,10 +44,11 @@ final class PointsView: UIView {
             x += CardsAttributes.pointWidth * 2
         }
         self.frame = CGRect(
-            x: super.bounds.width/2 - x/2,
+            x: superViewWidth/2 - x/2,
             y: 0,
             width: x,
             height: CardsAttributes.pointsViewHeight
         )
+        layoutIfNeeded()
     }
 }

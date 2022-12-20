@@ -10,8 +10,8 @@ import UIKit
 
 final class TimeCalculator {
     
-    static let trainSpeed: CGFloat = 90
-    static let humanSpeed: CGFloat = 11.5
+    static let trainSpeed: CGFloat = 40.0
+    static let humanSpeed: CGFloat = 10.0
     static let hour: CGFloat = 60.0
     
     static func timeByTrain(_ distance: CGFloat) -> CGFloat {

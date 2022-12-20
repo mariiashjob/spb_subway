@@ -60,8 +60,9 @@ class ViewController: UIViewController {
             x: 0,
             y: 0,
             width: self.view.bounds.width,
-            height: self.view.bounds.height // TODO: Bug - replace for scrollViewHeight or not? 
+            height: self.view.bounds.height
         )
+        mapContentView.routesView.layoutSubviews()
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {

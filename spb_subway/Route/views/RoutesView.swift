@@ -19,6 +19,8 @@ class RoutesView: UIView {
     lazy var routeDetailsView = RouteDetailsView(routeWatcher)
     lazy var pointsView = PointsView(routeWatcher)
     lazy var cardsCollectionView = CardsUICollectionView()
+    var width: CGFloat = 0.0
+    var height: CGFloat = 0.0
     
     convenience init(routeWatcher: RouteWatcher?) {
         self.init(frame: .zero)
@@ -27,6 +29,8 @@ class RoutesView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.width = superview?.frame.width ?? 300.0
+        self.height = superview?.frame.height ?? 100.0
         configure()
     }
     
@@ -51,7 +55,6 @@ class RoutesView: UIView {
             detailsScrollView.addSubview(routeDetailsView)
             detailsScrollView.contentSize = CGSize(width: self.bounds.width, height: routeDetailsView.bounds.height)
             addSubview(detailsScrollView)
-            detailsScrollView.showsVerticalScrollIndicator = false
             detailsScrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         }
     }
@@ -69,11 +72,6 @@ class RoutesView: UIView {
                 routeWatcher: routeWatcher,
                 subway: subway,
                 mapDelegate: delegate)
-            cardsCollectionView.frame = CGRect(
-                x: 0,
-                y: 0,
-                width: self.bounds.width,
-                height: 100.0)
             cardsView.addSubview(cardsCollectionView)
         }
         configurePointsView()
@@ -81,16 +79,13 @@ class RoutesView: UIView {
     }
     
     private func configureFrames() {
-        let width = superview?.bounds.width ?? 300.0
-        let height = superview?.bounds.height ?? 100.0
         self.frame = CGRect(
             x: 0,
             y: 0,
             width: width,
-            height: height
-        )
+            height: height)
         pointsView.frame = CGRect(
-            x: 50.0,
+            x: 0,
             y: 0,
             width: width,
             height: CardsAttributes.pointsViewHeight)
@@ -103,7 +98,12 @@ class RoutesView: UIView {
             x: 0,
             y: cardsCollectionView.bounds.maxY + AttributesConstants.spacing,
             width: self.bounds.width,
-            height: UIScreen.main.bounds.height * 0.6
-        )
+            height: UIScreen.main.bounds.height * 0.6)
+        cardsCollectionView.frame = CGRect(
+            x: 0,
+            y: 0,
+            width:
+                width,
+            height: 100.0)
     }
 }

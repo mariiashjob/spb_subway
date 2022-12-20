@@ -369,7 +369,6 @@ class MapContentView: UIView, UITextFieldDelegate, UIGestureRecognizerDelegate, 
     }
     
     private func configureSearchField(direction: String?) {
-        // TODO: add animation
         searchLabel = UILabel()
         searchField = SearchField()
         guard let searchField = searchField, let searchFieldView = searchFieldView, let searchLabel = searchLabel else {

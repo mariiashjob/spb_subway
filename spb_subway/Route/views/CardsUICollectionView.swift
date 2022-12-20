@@ -43,7 +43,7 @@ final class CardsUICollectionView: UICollectionView, UICollectionViewDelegate, U
     override func layoutSubviews() {
         super.layoutSubviews()
         self.backgroundColor = nil
-        self.isUserInteractionEnabled = true
+        //self.isUserInteractionEnabled = true
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -60,7 +60,7 @@ final class CardsUICollectionView: UICollectionView, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: super.bounds.width, height: CardsAttributes.cardHeight)
+        return CGSize(width: frame.width, height: CardsAttributes.cardHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
